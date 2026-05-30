@@ -1,0 +1,16 @@
+[package]
+name = "hakor/rojo-src"
+version = "0.1.0"
+registry = "https://github.com/UpliftGames/wally-index"
+realm = "shared"
+
+[dependencies]
+promise = "evaera/promise@4.0.0"
+spring = "nyxariko/spring@0.1.1"
+sera = "enzzyfrenzzy/sera@0.0.2"
+quickzone = "levnth/quickzone@0.0.1"
+lync = "axp3cter/lync@2.3.3"
+fusion = "mattschrubb/fusion@1.2.5"
+
+[server-dependencies]
+profilestore = "ddashdev/profilestore@1.0.4"
