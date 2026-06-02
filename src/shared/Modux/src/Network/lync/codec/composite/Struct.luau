@@ -63,6 +63,12 @@ local DELTA_UNCHANGED = Shared.DELTA_UNCHANGED
 local DELTA_FULL_OFFSET = Shared.DELTA_FULL_OFFSET
 local DELTA_MULTI_OFFSET = Shared.DELTA_MULTI_OFFSET
 
+local function assertStructValue(value: any): ()
+    if typeof(value) ~= "table" then
+        Log.error(`struct expected table payload, got {typeof(value)}`)
+    end
+end
+
 local function buildFrozenSchema(
     dataKeys: { string },
     boolKeys: { string },
@@ -135,6 +141,7 @@ function Struct.struct(schema: { [string]: Types.InternalCodec<any> }): Types.In
             _schema = frozenSchema,
 
             _directWrite = function(b: buffer, off: number, value: any): ()
+                assertStructValue(value)
                 for i = 1, dataCount do
                     directWrites[i](b, off + offsets[i], value[dataKeys[i]])
                 end
@@ -171,6 +178,7 @@ function Struct.struct(schema: { [string]: Types.InternalCodec<any> }): Types.In
             end,
 
             write = function(ch: Types.ChannelState, value: any): ()
+                assertStructValue(value)
                 local cursor = ch.cursor
                 if cursor + totalFixed > ch.size then
                     alloc(ch, totalFixed)
@@ -209,6 +217,7 @@ function Struct.struct(schema: { [string]: Types.InternalCodec<any> }): Types.In
         _schema = frozenSchema,
 
         write = function(ch: Types.ChannelState, value: any): ()
+            assertStructValue(value)
             for i = 1, dataCount do
                 dataCodecs[i].write(ch, value[dataKeys[i]])
             end
@@ -341,6 +350,7 @@ function Struct.deltaStruct(
         _schema = frozenSchema,
 
         write = function(ch: Types.ChannelState, value: any): ()
+            assertStructValue(value)
             local scratch = acquireScratch()
             local segOff: { number }, segLen: { number }
 

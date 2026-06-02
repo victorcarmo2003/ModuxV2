@@ -46,4 +46,19 @@ function ComponentRegistry.GetAll(id: string)
 	return ComponentRegistry._byType[id] or {}
 end
 
+function ComponentRegistry.Snapshot()
+	local entries = {}
+	for instance, byId in ComponentRegistry._active do
+		for id in byId do
+			table.insert(entries, { instance = instance, id = id })
+		end
+	end
+	return entries
+end
+
+function ComponentRegistry.Clear()
+	table.clear(ComponentRegistry._active)
+	table.clear(ComponentRegistry._byType)
+end
+
 return ComponentRegistry

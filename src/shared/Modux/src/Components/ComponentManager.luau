@@ -1,118 +1,103 @@
 --!strict
 local CollectionService = game:GetService("CollectionService")
-local Conteiner = require(script.Parent.Parent.Core.Conteiner)
+local Container = require(script.Parent.Parent.Core.Container)
+local Composition = require(script.Parent.Parent.Core.Composition)
+local Lifecycle = require(script.Parent.Parent.Core.Lifecycle)
+local TickScheduler = require(script.Parent.Parent.Core.TickScheduler)
+local SimulationScheduler = require(script.Parent.Parent.Core.SimulationScheduler)
 local Registry = require(script.Parent.ComponentRegistry)
 
 local ComponentManager = {}
+local connections = {}
 
 function ComponentManager.Start()
-	for id, reg in Conteiner._all do
-		if reg.Type == "Component" then
-			local template = reg.Object
-			if template._tag then
-				-- Escutar novas instâncias
-				CollectionService:GetInstanceAddedSignal(template._tag):Connect(function(instance)
-					ComponentManager.Create(id, instance)
-				end)
+	for id, registered in Container._all do
+		if registered.Type ~= "Component" then
+			continue
+		end
+		local template = registered.Object
+		if not template._tag then
+			continue
+		end
 
-				-- Escutar remoções
-				CollectionService:GetInstanceRemovedSignal(template._tag):Connect(function(instance)
-					ComponentManager.Destroy(id, instance)
-				end)
-
-				-- Instanciar o que já existe no mapa
-				for _, instance in CollectionService:GetTagged(template._tag) do
-					task.spawn(ComponentManager.Create, id, instance)
-				end
-			end
+		table.insert(connections, CollectionService:GetInstanceAddedSignal(template._tag):Connect(function(instance)
+			ComponentManager.Create(id, instance)
+		end))
+		table.insert(connections, CollectionService:GetInstanceRemovedSignal(template._tag):Connect(function(instance)
+			ComponentManager.Destroy(id, instance)
+		end))
+		for _, instance in CollectionService:GetTagged(template._tag) do
+			task.spawn(ComponentManager.Create, id, instance)
 		end
 	end
 end
 
 function ComponentManager.Create(id: string, instance: Instance)
-	local reg = Conteiner._all[id]
-	if not reg then
+	local registered = Container.Get(id)
+	if not registered or registered.Type ~= "Component" then
 		return
 	end
 
-	local template = reg.Object
-
-	-- 1. Validar ClassName se especificado
+	local template = registered.Object
 	if template._className and not instance:IsA(template._className) then
 		return
 	end
-
-	-- 2. Validar Filhos Obrigatórios
-	if template._requiredChildren then
-		for _, childName in template._requiredChildren do
-			if not instance:FindFirstChild(childName) then
-				return
-			end
+	for _, childName in template._requiredChildren or {} do
+		if not instance:FindFirstChild(childName) then
+			return
 		end
 	end
-
-	-- Evitar duplicatas para a mesma instância e mesmo ID
 	if Registry.Get(instance, id) then
 		return
 	end
 
-	-- Criar uma nova instância clonada do Template
-	local component = Conteiner.Resolve(nil, id)
+	local component = Container.Resolve(nil, id)
 	component.Instance = instance
-
 	Registry.Add(instance, id, component)
+	Composition.ResolveImports(component)
 
-	-- 3. Resolver Imports e Extends
-	if component._imports then
-		for _, dep in component._imports do
-			component[dep.id] = Conteiner.Resolve(component, dep.id, dep.scopeKey)
-		end
-	end
-
-	if component._extend then
-		local resolved = Conteiner.Resolve(component, component._extend)
-		setmetatable(component, { __index = resolved })
-	end
-
-	-- 4. Sincronizar Atributos
 	if template._attributeSchema then
 		component.Attributes = {}
-		for attrName, defaultValue in template._attributeSchema do
-			local currentVal = instance:GetAttribute(attrName)
-			component.Attributes[attrName] = if currentVal ~= nil then currentVal else defaultValue
-
-			-- Auto-update quando o atributo mudar no Studio/Script
-			component:Cleanup(instance:GetAttributeChangedSignal(attrName):Connect(function()
-				component.Attributes[attrName] = instance:GetAttribute(attrName)
+		for attributeName, defaultValue in template._attributeSchema do
+			local currentValue = instance:GetAttribute(attributeName)
+			component.Attributes[attributeName] = if currentValue ~= nil then currentValue else defaultValue
+			component:Cleanup(instance:GetAttributeChangedSignal(attributeName):Connect(function()
+				component.Attributes[attributeName] = instance:GetAttribute(attributeName)
 			end))
 		end
 	end
 
-	-- 5. Rodar Lifecycle
-	if component._onInit then
-		component._onInit(component)
+	Lifecycle.Run(component, "_onInit")
+	Lifecycle.Run(component, "_onStart")
+	for _, tick in component._onTick or {} do
+		component:Cleanup(TickScheduler.Register(component, tick))
 	end
-
-	if component._onStart then
-		component._onStart(component)
+	for _, simulation in component._onSimulation or {} do
+		component:Cleanup(SimulationScheduler.Register(component, simulation))
 	end
 end
 
 function ComponentManager.Destroy(id: string, instance: Instance)
 	local component = Registry.Get(instance, id)
-	if component then
-		-- Primeiro roda o OnDestroy do usuário
-		if component._onDestroy then
-			component._onDestroy(component)
-		end
-
-		-- Depois limpa tudo que foi registrado no :Cleanup()
-		if component._doCleanup then
-			component:_doCleanup()
-		end
-
-		Registry.Remove(instance, id)
+	if not component then
+		return
 	end
+	Lifecycle.Run(component, "_onDestroy")
+	if component._doCleanup then
+		component:_doCleanup()
+	end
+	Registry.Remove(instance, id)
+end
+
+function ComponentManager.Stop()
+	for _, connection in connections do
+		connection:Disconnect()
+	end
+	table.clear(connections)
+	for _, entry in Registry.Snapshot() do
+		ComponentManager.Destroy(entry.id, entry.instance)
+	end
+	Registry.Clear()
 end
 
 return ComponentManager

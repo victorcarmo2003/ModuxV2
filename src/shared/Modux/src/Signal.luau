@@ -2,7 +2,26 @@
 -- Sistema de eventos/sinais usando metatables em Lua
 -- Permite conectar callbacks a sinais e disparar eventos
 
-local Signal = {}
+export type SignalConnection = {
+	Connected: boolean,
+	Disconnect: (self: SignalConnection) -> (),
+}
+
+export type Signal<T...> = {
+	Connect: (self: Signal<T...>, callback: (T...) -> ()) -> SignalConnection,
+	Fire: (self: Signal<T...>, T...) -> (),
+	Wait: (self: Signal<T...>) -> T...,
+	Block: (self: Signal<T...>) -> (),
+	Unblock: (self: Signal<T...>) -> (),
+	GetConnectionCount: (self: Signal<T...>) -> number,
+	DisconnectAll: (self: Signal<T...>) -> (),
+}
+
+export type SignalAPI = {
+	new: <T...>() -> Signal<T...>,
+}
+
+local Signal = {} :: any
 Signal.__index = Signal
 
 -- Cria um novo sinal
@@ -133,4 +152,4 @@ setmetatable(Signal, {
 	end,
 })
 
-return Signal
+return (Signal :: any) :: SignalAPI

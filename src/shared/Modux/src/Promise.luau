@@ -54,6 +54,17 @@ export type PromiseLike = {
 }
 
 export type Promise<T> = PromiseLike & {
+	andThen: <U>(
+		self: Promise<T>,
+		onFulfilled: ((value: T) -> U | Promise<U>)?,
+		onRejected: ((reason: any) -> U | Promise<U>)?
+	) -> Promise<U>,
+	catch: <U>(self: Promise<T>, onRejected: (reason: any) -> U | Promise<U>) -> Promise<T | U>,
+	tap: (self: Promise<T>, onTap: (value: T) -> any) -> Promise<T>,
+	now: (self: Promise<T>, rejectionValue: any?) -> Promise<T>,
+	timeout: (self: Promise<T>, seconds: number, rejectionValue: any?) -> Promise<T>,
+	awaitStatus: (self: Promise<T>) -> (Status, T?),
+	expect: (self: Promise<T>) -> T,
 	await: (self: Promise<T>) -> (boolean, T?),
 }
 

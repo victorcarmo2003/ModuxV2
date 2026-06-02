@@ -4,31 +4,43 @@ local Registry = require(ReplicatedStorage.Shared.Modux.src.Components.Component
 local Constructor = {}
 Constructor.__index = Constructor
 Constructor._imports = {}
-Constructor._onInit = nil
-Constructor._onStart = nil
+Constructor._mixins = {}
+Constructor._onInit = {}
+Constructor._onStart = {}
+Constructor._onTick = {}
 Constructor._onSimulation = {}
-Constructor._onDestroy = nil
+Constructor._onDestroy = {}
 Constructor._tag = nil
 Constructor._className = nil
 Constructor._attributeSchema = nil
 Constructor._requiredChildren = nil
 Constructor._cleanupTasks = {}
 
-export type Type = "Service" | "Controller" | "Component"
+export type Type = "Service" | "Controller" | "Component" | "Mixin"
 
 export type Constructor = typeof(setmetatable({}, Constructor))
 
 function Constructor:OnInit(cb: (self: any) -> ())
-	self._onInit = cb
+	table.insert(self._onInit, cb)
 	return self
 end
 
 function Constructor:OnStart(cb: (self: any) -> ())
-	self._onStart = cb
+	table.insert(self._onStart, cb)
 	return self
 end
 
-function Constructor:OnSimulation(cb: (self: any) -> (), frequency: Enum.StepFrequency?, priority: number?)
+function Constructor:OnTick(cb: (self: any, deltaTime: number) -> (), rate: number, priority: number?)
+	assert(type(rate) == "number" and rate > 0, "[Modux] OnTick rate must be greater than zero.")
+	table.insert(self._onTick, {
+		Callback = cb,
+		Rate = rate,
+		Priority = priority,
+	})
+	return self
+end
+
+function Constructor:OnSimulation(cb: (self: any, deltaTime: number) -> (), frequency: Enum.StepFrequency?, priority: number?)
 	table.insert(self._onSimulation, {
 		Callback = cb,
 		Frequency = frequency,
@@ -38,7 +50,7 @@ function Constructor:OnSimulation(cb: (self: any) -> (), frequency: Enum.StepFre
 end
 
 function Constructor:OnDestroy(cb: (self: any) -> ())
-	self._onDestroy = cb
+	table.insert(self._onDestroy, cb)
 	return self
 end
 
@@ -90,6 +102,8 @@ function Constructor:_doCleanup()
 				task:Destroy()
 			elseif typeof(task.Disconnect) == "function" then
 				task:Disconnect()
+			elseif typeof(task.cancel) == "function" then
+				task:cancel()
 			end
 		end
 	end
@@ -115,15 +129,19 @@ function Constructor.New(ID: string, Type: Type)
 	self.Signal = Signal
 	self.GlobalClock = GlobalClock
 	self.Attributes = {}
-	self._onInit = nil
-	self._onStart = nil
+	self._imports = {}
+	self._mixins = {}
+	self._onInit = {}
+	self._onStart = {}
+	self._onTick = {}
 	self._onSimulation = {}
-	self._onDestroy = nil
+	self._onDestroy = {}
 	self._tag = nil
 	self._className = nil
 	self._attributeSchema = nil
 	self._requiredChildren = nil
 	self._cleanupTasks = {}
+	self._composed = false
 	return self
 end
 
