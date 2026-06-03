@@ -8,16 +8,20 @@ return {
 		"Components.SolarPanelComponent",
 	},
 	Server = {
+		"Components.AliensComponent",
+		"Components.VitalComponent",
 		"Components.ZoneComponent",
 		"Services.BattleService",
 		"Services.ClassService",
 		"Services.DayNightService",
+		"Services.EnemyService",
 		"Services.GameService",
 		"Services.GeneratorService",
 		"Services.LeaderstatsService",
 		"Services.PlayerBillboardService",
 		"Services.PlayerService",
 		"Services.ProfileService",
+		"Services.VitalService",
 		"Services.ZoneService",
 	},
 	Client = {
@@ -25,5 +29,7 @@ return {
 		"Controllers.NotificationController",
 		"Controllers.ProfileController",
 		"Controllers.ScreenController",
+		"Controllers.UIAnimationsController",
+		"Controllers.VitalController",
 	},
 }

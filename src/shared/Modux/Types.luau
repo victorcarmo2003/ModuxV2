@@ -52,6 +52,8 @@ export type DataKeyPayload =
 	| { key: "SoundVolume", SoundVolume: number }
 	| { key: "MusicEnabled", MusicEnabled: boolean }
 	| { key: "SoundEnabled", SoundEnabled: boolean }
+type MainGui = ScreenGuiRoot
+type WindowId = UIWindowId
 export type ClassDefinition<T> = {
 	Id: number,
 	Name: string,
@@ -250,7 +252,7 @@ export type PromiseAPI = {
 
 export type GlobalClock = {
 	GetTime: (self: GlobalClock) -> number,
-	GetSine: (self: GlobalClock, speed: number?, amplitude: number?, offset: number?) -> number,
+	GetSine: ((self: GlobalClock) -> number) & ((self: GlobalClock, speed: number?) -> number) & ((self: GlobalClock, speed: number?, amplitude: number?) -> number) & ((self: GlobalClock, speed: number?, amplitude: number?, offset: number?) -> number),
 	Lerp: (self: GlobalClock, a: number, b: number, t: number) -> number,
 }
 
@@ -285,9 +287,147 @@ export type Network = {
 		DayCycle: LyncPacket<{
 	Message: number,
 }>,
+		VitalKey: LyncPacket<{
+	key: "Armor",
+	value: number,
+}
+	| {
+	key: "Health",
+	value: number,
+}
+	| {
+	key: "Hunger",
+	value: number,
+}
+	| {
+	key: "Stamina",
+	value: number,
+}
+	| {
+	key: "Oxygen",
+	value: number,
+}
+	| {
+	key: "MaxOxygen",
+	value: number,
+}>,
 	},
 	all: NetworkTarget,
 }
+
+--> STARTERGUI TYPES
+export type UIWindowId = "WorkBench"
+
+export type ScreenGuiRoot = ScreenGui & {
+	Conteiner: Frame & {
+		Hotbar: Frame & {
+			Frame: Frame & {
+				UICorner: UICorner,
+				UIStroke: UIStroke,
+			},
+			UIGridLayout: UIGridLayout,
+		},
+		MiniMap: Frame & {
+			UIAspectRatioConstraint: UIAspectRatioConstraint,
+			UICorner: UICorner,
+			UIStroke: UIStroke,
+		},
+		Player: Frame & {
+			Health: Frame & {
+				Icon: ImageLabel,
+				Inner: Frame & {
+					UICorner: UICorner,
+					UIGradient: UIGradient,
+				},
+				TextLabel: TextLabel & {
+					UIStroke: UIStroke,
+					UITextSizeConstraint: UITextSizeConstraint,
+				},
+				UICorner: UICorner,
+				UIStroke: UIStroke,
+			},
+			Hunger: Frame & {
+				Icon: ImageLabel,
+				Inner: Frame & {
+					UICorner: UICorner,
+					UIGradient: UIGradient,
+				},
+				TextLabel: TextLabel & {
+					UIStroke: UIStroke,
+					UITextSizeConstraint: UITextSizeConstraint,
+				},
+				UICorner: UICorner,
+				UIStroke: UIStroke,
+			},
+			Oxygen: Frame & {
+				Icon: ImageLabel,
+				Inner: Frame & {
+					UICorner: UICorner,
+					UIGradient: UIGradient,
+				},
+				TextLabel: TextLabel & {
+					UIStroke: UIStroke,
+					UITextSizeConstraint: UITextSizeConstraint,
+				},
+				UICorner: UICorner,
+				UIStroke: UIStroke,
+			},
+		},
+		Status: Frame & {
+			ClockLabel: TextLabel & {
+				UICorner: UICorner,
+				UIStroke: UIStroke,
+				UITextSizeConstraint: UITextSizeConstraint,
+			},
+			DayLabel: TextLabel & {
+				UICorner: UICorner,
+				UIStroke: UIStroke,
+				UITextSizeConstraint: UITextSizeConstraint,
+			},
+			UIAspectRatioConstraint: UIAspectRatioConstraint,
+			UIListLayout: UIListLayout,
+		},
+		Windows: Folder & {
+			WorkBench: Frame & {
+				CloseButton: ImageButton & {
+					TextLabel: TextLabel & {
+						UIStroke: UIStroke,
+						UITextSizeConstraint: UITextSizeConstraint,
+					},
+					UICorner: UICorner,
+					UIGradient: UIGradient,
+					UIStroke: UIStroke,
+				},
+				Title: TextLabel & {
+					UIStroke: UIStroke,
+					UITextSizeConstraint: UITextSizeConstraint,
+				},
+				UICorner: UICorner,
+				UIStroke: UIStroke,
+			},
+		},
+	},
+}
+
+export type StarterGuiTypes = {
+	ScreenGui: ScreenGuiRoot,
+}
+
+--> COMPONENT INSTANCE TYPES
+
+export type AliensComponentInstance = Model
+
+export type RegionComponentInstance = Instance
+
+export type SolarPanelComponentInstance = Model & {
+	Cube_Node: Model,
+	["Cube.001"]: Model,
+	Panel: MeshPart,
+}
+
+export type VitalComponentInstance = Player
+
+export type ZoneComponentInstance = Instance
 
 --> SERVICES, CONTROLLERS & COMPONENTS
 export type DayCycleController = {
@@ -299,16 +439,16 @@ export type DayCycleController = {
 	Import: ControllerImportFn,
 	OnInit: (self: DayCycleController, cb: (self: DayCycleController) -> ()) -> DayCycleController,
 	OnStart: (self: DayCycleController, cb: (self: DayCycleController) -> ()) -> DayCycleController,
-	OnTick: (self: DayCycleController, cb: (self: DayCycleController, deltaTime: number) -> (), rate: number, priority: number?) -> DayCycleController,
-	OnSimulation: (self: DayCycleController, cb: (self: DayCycleController, deltaTime: number) -> (), frequency: Enum.StepFrequency?, priority: number?) -> DayCycleController,
+	OnTick: ((self: DayCycleController, cb: (self: DayCycleController, deltaTime: number) -> (), rate: number) -> DayCycleController) & ((self: DayCycleController, cb: (self: DayCycleController, deltaTime: number) -> (), rate: number, priority: number?) -> DayCycleController),
+	OnSimulation: ((self: DayCycleController, cb: (self: DayCycleController, deltaTime: number) -> ()) -> DayCycleController) & ((self: DayCycleController, cb: (self: DayCycleController, deltaTime: number) -> (), frequency: Enum.StepFrequency?) -> DayCycleController) & ((self: DayCycleController, cb: (self: DayCycleController, deltaTime: number) -> (), frequency: Enum.StepFrequency?, priority: number?) -> DayCycleController),
 	OnDestroy: (self: DayCycleController, cb: (self: DayCycleController) -> ()) -> DayCycleController,
 	Tag: (self: DayCycleController, tag: string) -> DayCycleController,
 	ClassName: (self: DayCycleController, className: string) -> DayCycleController,
 	AttributeDefaults: (self: DayCycleController, schema: { [string]: any }) -> DayCycleController,
 	Children: (self: DayCycleController, children: { string }) -> DayCycleController,
-	GetAllComponents: (self: DayCycleController, id: string) -> any,
-	GetComponent: (self: DayCycleController, instance: Instance, id: string) -> any,
 	New: (self: DayCycleController, ID: string, Type: Type) -> DayCycleController,
+	GetComponent: GetComponentFn,
+	GetAllComponents: GetAllComponentsFn,
 	Cleanup: <T>(self: any, task: T) -> T,
 	Network: Network,
 	Promise: PromiseAPI,
@@ -324,16 +464,16 @@ export type NotificationController = {
 	Import: ControllerImportFn,
 	OnInit: (self: NotificationController, cb: (self: NotificationController) -> ()) -> NotificationController,
 	OnStart: (self: NotificationController, cb: (self: NotificationController) -> ()) -> NotificationController,
-	OnTick: (self: NotificationController, cb: (self: NotificationController, deltaTime: number) -> (), rate: number, priority: number?) -> NotificationController,
-	OnSimulation: (self: NotificationController, cb: (self: NotificationController, deltaTime: number) -> (), frequency: Enum.StepFrequency?, priority: number?) -> NotificationController,
+	OnTick: ((self: NotificationController, cb: (self: NotificationController, deltaTime: number) -> (), rate: number) -> NotificationController) & ((self: NotificationController, cb: (self: NotificationController, deltaTime: number) -> (), rate: number, priority: number?) -> NotificationController),
+	OnSimulation: ((self: NotificationController, cb: (self: NotificationController, deltaTime: number) -> ()) -> NotificationController) & ((self: NotificationController, cb: (self: NotificationController, deltaTime: number) -> (), frequency: Enum.StepFrequency?) -> NotificationController) & ((self: NotificationController, cb: (self: NotificationController, deltaTime: number) -> (), frequency: Enum.StepFrequency?, priority: number?) -> NotificationController),
 	OnDestroy: (self: NotificationController, cb: (self: NotificationController) -> ()) -> NotificationController,
 	Tag: (self: NotificationController, tag: string) -> NotificationController,
 	ClassName: (self: NotificationController, className: string) -> NotificationController,
 	AttributeDefaults: (self: NotificationController, schema: { [string]: any }) -> NotificationController,
 	Children: (self: NotificationController, children: { string }) -> NotificationController,
-	GetAllComponents: (self: NotificationController, id: string) -> any,
-	GetComponent: (self: NotificationController, instance: Instance, id: string) -> any,
 	New: (self: NotificationController, ID: string, Type: Type) -> NotificationController,
+	GetComponent: GetComponentFn,
+	GetAllComponents: GetAllComponentsFn,
 	Cleanup: <T>(self: any, task: T) -> T,
 	Network: Network,
 	Promise: PromiseAPI,
@@ -349,16 +489,16 @@ export type ProfileController = {
 	Import: ControllerImportFn,
 	OnInit: (self: ProfileController, cb: (self: ProfileController) -> ()) -> ProfileController,
 	OnStart: (self: ProfileController, cb: (self: ProfileController) -> ()) -> ProfileController,
-	OnTick: (self: ProfileController, cb: (self: ProfileController, deltaTime: number) -> (), rate: number, priority: number?) -> ProfileController,
-	OnSimulation: (self: ProfileController, cb: (self: ProfileController, deltaTime: number) -> (), frequency: Enum.StepFrequency?, priority: number?) -> ProfileController,
+	OnTick: ((self: ProfileController, cb: (self: ProfileController, deltaTime: number) -> (), rate: number) -> ProfileController) & ((self: ProfileController, cb: (self: ProfileController, deltaTime: number) -> (), rate: number, priority: number?) -> ProfileController),
+	OnSimulation: ((self: ProfileController, cb: (self: ProfileController, deltaTime: number) -> ()) -> ProfileController) & ((self: ProfileController, cb: (self: ProfileController, deltaTime: number) -> (), frequency: Enum.StepFrequency?) -> ProfileController) & ((self: ProfileController, cb: (self: ProfileController, deltaTime: number) -> (), frequency: Enum.StepFrequency?, priority: number?) -> ProfileController),
 	OnDestroy: (self: ProfileController, cb: (self: ProfileController) -> ()) -> ProfileController,
 	Tag: (self: ProfileController, tag: string) -> ProfileController,
 	ClassName: (self: ProfileController, className: string) -> ProfileController,
 	AttributeDefaults: (self: ProfileController, schema: { [string]: any }) -> ProfileController,
 	Children: (self: ProfileController, children: { string }) -> ProfileController,
-	GetAllComponents: (self: ProfileController, id: string) -> any,
-	GetComponent: (self: ProfileController, instance: Instance, id: string) -> any,
 	New: (self: ProfileController, ID: string, Type: Type) -> ProfileController,
+	GetComponent: GetComponentFn,
+	GetAllComponents: GetAllComponentsFn,
 	Cleanup: <T>(self: any, task: T) -> T,
 	Network: Network,
 	Promise: PromiseAPI,
@@ -370,26 +510,184 @@ export type ProfileController = {
 export type ScreenController = {
 	ID: string,
 	Type: Type,
+	UIAnimationsController: UIAnimationsController,
+	GetGui: (self: ScreenController) -> MainGui,
+	GetWindowId: (self: ScreenController, window: GuiObject) -> WindowId,
+	IsInsideGui: (self: ScreenController, instance: Instance) -> boolean,
+	RegisterWindow: ((self: ScreenController, window: GuiObject) -> GuiObject) & ((self: ScreenController, window: GuiObject, id: WindowId?) -> GuiObject),
+	TryRegisterWindow: (self: ScreenController, instance: Instance) -> any,
+	RegisterTaggedWindows: (self: ScreenController) -> (),
+	OnOpen: (self: ScreenController, id: WindowId, callback: (window: GuiObject) -> ()) -> (),
+	OnClose: (self: ScreenController, id: WindowId, callback: (window: GuiObject) -> ()) -> (),
+	GetWindow: (self: ScreenController, id: WindowId) -> GuiObject?,
+	GetCurrentWindow: (self: ScreenController) -> WindowId?,
+	FireWindowCallbacks: (self: ScreenController, callbacks: { [WindowId]: { (window: GuiObject) -> () } }, id: WindowId, window: GuiObject) -> any,
+	CloseWindow: (self: ScreenController) -> any,
+	OpenWindow: (self: ScreenController, id: WindowId) -> any,
+	BindButton: (self: ScreenController, button: GuiButton, id: WindowId) -> RBXScriptConnection,
+	TryBindOpenButton: (self: ScreenController, instance: Instance) -> any,
+	TryBindCloseButton: (self: ScreenController, instance: Instance) -> any,
+	BindTaggedButtons: (self: ScreenController) -> (),
+	Gui: MainGui?,
+	Windows: { [WindowId]: GuiObject },
+	CurrentWindow: WindowId?,
+	BoundButtons: { [Instance]: boolean },
+	ButtonConnections: { [Instance]: RBXScriptConnection },
+	OnOpenCallbacks: { [WindowId]: { (window: GuiObject) -> () } },
+	OnCloseCallbacks: { [WindowId]: { (window: GuiObject) -> () } },
 	Extend: (self: ScreenController, id: "PlayerZoneComponent") -> ScreenController,
 	Import: ControllerImportFn,
 	OnInit: (self: ScreenController, cb: (self: ScreenController) -> ()) -> ScreenController,
 	OnStart: (self: ScreenController, cb: (self: ScreenController) -> ()) -> ScreenController,
-	OnTick: (self: ScreenController, cb: (self: ScreenController, deltaTime: number) -> (), rate: number, priority: number?) -> ScreenController,
-	OnSimulation: (self: ScreenController, cb: (self: ScreenController, deltaTime: number) -> (), frequency: Enum.StepFrequency?, priority: number?) -> ScreenController,
+	OnTick: ((self: ScreenController, cb: (self: ScreenController, deltaTime: number) -> (), rate: number) -> ScreenController) & ((self: ScreenController, cb: (self: ScreenController, deltaTime: number) -> (), rate: number, priority: number?) -> ScreenController),
+	OnSimulation: ((self: ScreenController, cb: (self: ScreenController, deltaTime: number) -> ()) -> ScreenController) & ((self: ScreenController, cb: (self: ScreenController, deltaTime: number) -> (), frequency: Enum.StepFrequency?) -> ScreenController) & ((self: ScreenController, cb: (self: ScreenController, deltaTime: number) -> (), frequency: Enum.StepFrequency?, priority: number?) -> ScreenController),
 	OnDestroy: (self: ScreenController, cb: (self: ScreenController) -> ()) -> ScreenController,
 	Tag: (self: ScreenController, tag: string) -> ScreenController,
 	ClassName: (self: ScreenController, className: string) -> ScreenController,
 	AttributeDefaults: (self: ScreenController, schema: { [string]: any }) -> ScreenController,
 	Children: (self: ScreenController, children: { string }) -> ScreenController,
-	GetAllComponents: (self: ScreenController, id: string) -> any,
-	GetComponent: (self: ScreenController, instance: Instance, id: string) -> any,
 	New: (self: ScreenController, ID: string, Type: Type) -> ScreenController,
+	GetComponent: GetComponentFn,
+	GetAllComponents: GetAllComponentsFn,
 	Cleanup: <T>(self: any, task: T) -> T,
 	Network: Network,
 	Promise: PromiseAPI,
 	GlobalClock: GlobalClock,
 	Signal: SignalAPI,
 	Attributes: { [string]: any },
+}
+
+export type UIAnimationsController = {
+	ID: string,
+	Type: Type,
+	EnsureScale: (self: UIAnimationsController, window: GuiObject) -> UIScale,
+	FindCanvas: (self: UIAnimationsController, window: GuiObject) -> CanvasGroup?,
+	Stop: (self: UIAnimationsController, window: GuiObject) -> (),
+	PlayScale: ((self: UIAnimationsController, window: GuiObject, fromScale: number, toScale: number) -> ()) & ((self: UIAnimationsController, window: GuiObject, fromScale: number, toScale: number, onStep: ((alpha: number) -> ())?) -> ()) & ((self: UIAnimationsController, window: GuiObject, fromScale: number, toScale: number, onStep: ((alpha: number) -> ())?, onDone: (() -> ())?) -> ()),
+	Open: (self: UIAnimationsController, window: GuiObject) -> (),
+	Close: ((self: UIAnimationsController, window: GuiObject) -> ()) & ((self: UIAnimationsController, window: GuiObject, onDone: (() -> ())?) -> ()),
+	ActiveConnections: { [GuiObject]: RBXScriptConnection },
+	Extend: (self: UIAnimationsController, id: "PlayerZoneComponent") -> UIAnimationsController,
+	Import: ControllerImportFn,
+	OnInit: (self: UIAnimationsController, cb: (self: UIAnimationsController) -> ()) -> UIAnimationsController,
+	OnStart: (self: UIAnimationsController, cb: (self: UIAnimationsController) -> ()) -> UIAnimationsController,
+	OnTick: ((self: UIAnimationsController, cb: (self: UIAnimationsController, deltaTime: number) -> (), rate: number) -> UIAnimationsController) & ((self: UIAnimationsController, cb: (self: UIAnimationsController, deltaTime: number) -> (), rate: number, priority: number?) -> UIAnimationsController),
+	OnSimulation: ((self: UIAnimationsController, cb: (self: UIAnimationsController, deltaTime: number) -> ()) -> UIAnimationsController) & ((self: UIAnimationsController, cb: (self: UIAnimationsController, deltaTime: number) -> (), frequency: Enum.StepFrequency?) -> UIAnimationsController) & ((self: UIAnimationsController, cb: (self: UIAnimationsController, deltaTime: number) -> (), frequency: Enum.StepFrequency?, priority: number?) -> UIAnimationsController),
+	OnDestroy: (self: UIAnimationsController, cb: (self: UIAnimationsController) -> ()) -> UIAnimationsController,
+	Tag: (self: UIAnimationsController, tag: string) -> UIAnimationsController,
+	ClassName: (self: UIAnimationsController, className: string) -> UIAnimationsController,
+	AttributeDefaults: (self: UIAnimationsController, schema: { [string]: any }) -> UIAnimationsController,
+	Children: (self: UIAnimationsController, children: { string }) -> UIAnimationsController,
+	New: (self: UIAnimationsController, ID: string, Type: Type) -> UIAnimationsController,
+	GetComponent: GetComponentFn,
+	GetAllComponents: GetAllComponentsFn,
+	Cleanup: <T>(self: any, task: T) -> T,
+	Network: Network,
+	Promise: PromiseAPI,
+	GlobalClock: GlobalClock,
+	Signal: SignalAPI,
+	Attributes: { [string]: any },
+}
+
+export type VitalController = {
+	ID: string,
+	Type: Type,
+	ScreenController: ScreenController,
+	UpdateHunger: (self: VitalController, arg1: number) -> (),
+	UpdateOxygen: (self: VitalController, arg1: number) -> (),
+	UpdateHealth: (self: VitalController, arg1: number) -> (),
+	ScreenGui: MainGui,
+	Extend: (self: VitalController, id: "PlayerZoneComponent") -> VitalController,
+	Import: ControllerImportFn,
+	OnInit: (self: VitalController, cb: (self: VitalController) -> ()) -> VitalController,
+	OnStart: (self: VitalController, cb: (self: VitalController) -> ()) -> VitalController,
+	OnTick: ((self: VitalController, cb: (self: VitalController, deltaTime: number) -> (), rate: number) -> VitalController) & ((self: VitalController, cb: (self: VitalController, deltaTime: number) -> (), rate: number, priority: number?) -> VitalController),
+	OnSimulation: ((self: VitalController, cb: (self: VitalController, deltaTime: number) -> ()) -> VitalController) & ((self: VitalController, cb: (self: VitalController, deltaTime: number) -> (), frequency: Enum.StepFrequency?) -> VitalController) & ((self: VitalController, cb: (self: VitalController, deltaTime: number) -> (), frequency: Enum.StepFrequency?, priority: number?) -> VitalController),
+	OnDestroy: (self: VitalController, cb: (self: VitalController) -> ()) -> VitalController,
+	Tag: (self: VitalController, tag: string) -> VitalController,
+	ClassName: (self: VitalController, className: string) -> VitalController,
+	AttributeDefaults: (self: VitalController, schema: { [string]: any }) -> VitalController,
+	Children: (self: VitalController, children: { string }) -> VitalController,
+	New: (self: VitalController, ID: string, Type: Type) -> VitalController,
+	GetComponent: GetComponentFn,
+	GetAllComponents: GetAllComponentsFn,
+	Cleanup: <T>(self: any, task: T) -> T,
+	Network: Network,
+	Promise: PromiseAPI,
+	GlobalClock: GlobalClock,
+	Signal: SignalAPI,
+	Attributes: { [string]: any },
+}
+
+export type AliensComponent = {
+	ID: string,
+	Type: Type,
+	PlayerService: PlayerService,
+	TakeDamage: (self: AliensComponent, amount: number) -> (),
+	MoveTo: (self: AliensComponent) -> (),
+	ChooseTarget: (self: AliensComponent) -> (),
+	StartSonar: (self: AliensComponent) -> (),
+	Health: number,
+	Damage: number,
+	Extend: (self: AliensComponent, id: "PlayerZoneComponent") -> AliensComponent,
+	Import: ComponentImportFn,
+	OnInit: (self: AliensComponent, cb: (self: AliensComponent) -> ()) -> AliensComponent,
+	OnStart: (self: AliensComponent, cb: (self: AliensComponent) -> ()) -> AliensComponent,
+	OnTick: ((self: AliensComponent, cb: (self: AliensComponent, deltaTime: number) -> (), rate: number) -> AliensComponent) & ((self: AliensComponent, cb: (self: AliensComponent, deltaTime: number) -> (), rate: number, priority: number?) -> AliensComponent),
+	OnSimulation: ((self: AliensComponent, cb: (self: AliensComponent, deltaTime: number) -> ()) -> AliensComponent) & ((self: AliensComponent, cb: (self: AliensComponent, deltaTime: number) -> (), frequency: Enum.StepFrequency?) -> AliensComponent) & ((self: AliensComponent, cb: (self: AliensComponent, deltaTime: number) -> (), frequency: Enum.StepFrequency?, priority: number?) -> AliensComponent),
+	OnDestroy: (self: AliensComponent, cb: (self: AliensComponent) -> ()) -> AliensComponent,
+	Tag: (self: AliensComponent, tag: string) -> AliensComponent,
+	ClassName: (self: AliensComponent, className: string) -> AliensComponent,
+	AttributeDefaults: (self: AliensComponent, schema: { [string]: any }) -> AliensComponent,
+	Children: (self: AliensComponent, children: { string }) -> AliensComponent,
+	New: (self: AliensComponent, ID: string, Type: Type) -> AliensComponent,
+	GetComponent: GetComponentFn,
+	GetAllComponents: GetAllComponentsFn,
+	Cleanup: <T>(self: any, task: T) -> T,
+	Network: Network,
+	Promise: PromiseAPI,
+	GlobalClock: GlobalClock,
+	Signal: SignalAPI,
+	Attributes: { [string]: any },
+	Instance: AliensComponentInstance,
+}
+
+export type VitalComponent = {
+	ID: string,
+	Type: Type,
+	TakeDamage: (self: VitalComponent, Amount: number) -> any,
+	SetArmor: (self: VitalComponent, Amount: number) -> (),
+	IncreaseHunger: (self: VitalComponent, Amount: number) -> (),
+	IncreaseOxygen: (self: VitalComponent, Amount: number) -> (),
+	SetMaxOxygen: (self: VitalComponent, Amount: number) -> (),
+	OnDie: Signal<Player>,
+	Health: number,
+	Armor: number,
+	MaxOxygen: number,
+	Hunger: number,
+	Stamina: number,
+	Oxygen: number,
+	Extend: (self: VitalComponent, id: "PlayerZoneComponent") -> VitalComponent,
+	Import: ComponentImportFn,
+	OnInit: (self: VitalComponent, cb: (self: VitalComponent) -> ()) -> VitalComponent,
+	OnStart: (self: VitalComponent, cb: (self: VitalComponent) -> ()) -> VitalComponent,
+	OnTick: ((self: VitalComponent, cb: (self: VitalComponent, deltaTime: number) -> (), rate: number) -> VitalComponent) & ((self: VitalComponent, cb: (self: VitalComponent, deltaTime: number) -> (), rate: number, priority: number?) -> VitalComponent),
+	OnSimulation: ((self: VitalComponent, cb: (self: VitalComponent, deltaTime: number) -> ()) -> VitalComponent) & ((self: VitalComponent, cb: (self: VitalComponent, deltaTime: number) -> (), frequency: Enum.StepFrequency?) -> VitalComponent) & ((self: VitalComponent, cb: (self: VitalComponent, deltaTime: number) -> (), frequency: Enum.StepFrequency?, priority: number?) -> VitalComponent),
+	OnDestroy: (self: VitalComponent, cb: (self: VitalComponent) -> ()) -> VitalComponent,
+	Tag: (self: VitalComponent, tag: string) -> VitalComponent,
+	ClassName: (self: VitalComponent, className: string) -> VitalComponent,
+	AttributeDefaults: (self: VitalComponent, schema: { [string]: any }) -> VitalComponent,
+	Children: (self: VitalComponent, children: { string }) -> VitalComponent,
+	New: (self: VitalComponent, ID: string, Type: Type) -> VitalComponent,
+	GetComponent: GetComponentFn,
+	GetAllComponents: GetAllComponentsFn,
+	Cleanup: <T>(self: any, task: T) -> T,
+	Network: Network,
+	Promise: PromiseAPI,
+	GlobalClock: GlobalClock,
+	Signal: SignalAPI,
+	Attributes: { [string]: any },
+	Instance: VitalComponentInstance,
 }
 
 export type ZoneComponent = {
@@ -403,23 +701,23 @@ export type ZoneComponent = {
 	Import: ComponentImportFn,
 	OnInit: (self: ZoneComponent, cb: (self: ZoneComponent) -> ()) -> ZoneComponent,
 	OnStart: (self: ZoneComponent, cb: (self: ZoneComponent) -> ()) -> ZoneComponent,
-	OnTick: (self: ZoneComponent, cb: (self: ZoneComponent, deltaTime: number) -> (), rate: number, priority: number?) -> ZoneComponent,
-	OnSimulation: (self: ZoneComponent, cb: (self: ZoneComponent, deltaTime: number) -> (), frequency: Enum.StepFrequency?, priority: number?) -> ZoneComponent,
+	OnTick: ((self: ZoneComponent, cb: (self: ZoneComponent, deltaTime: number) -> (), rate: number) -> ZoneComponent) & ((self: ZoneComponent, cb: (self: ZoneComponent, deltaTime: number) -> (), rate: number, priority: number?) -> ZoneComponent),
+	OnSimulation: ((self: ZoneComponent, cb: (self: ZoneComponent, deltaTime: number) -> ()) -> ZoneComponent) & ((self: ZoneComponent, cb: (self: ZoneComponent, deltaTime: number) -> (), frequency: Enum.StepFrequency?) -> ZoneComponent) & ((self: ZoneComponent, cb: (self: ZoneComponent, deltaTime: number) -> (), frequency: Enum.StepFrequency?, priority: number?) -> ZoneComponent),
 	OnDestroy: (self: ZoneComponent, cb: (self: ZoneComponent) -> ()) -> ZoneComponent,
 	Tag: (self: ZoneComponent, tag: string) -> ZoneComponent,
 	ClassName: (self: ZoneComponent, className: string) -> ZoneComponent,
 	AttributeDefaults: (self: ZoneComponent, schema: { [string]: any }) -> ZoneComponent,
 	Children: (self: ZoneComponent, children: { string }) -> ZoneComponent,
-	GetAllComponents: (self: ZoneComponent, id: string) -> any,
-	GetComponent: (self: ZoneComponent, instance: Instance, id: string) -> any,
 	New: (self: ZoneComponent, ID: string, Type: Type) -> ZoneComponent,
+	GetComponent: GetComponentFn,
+	GetAllComponents: GetAllComponentsFn,
 	Cleanup: <T>(self: any, task: T) -> T,
 	Network: Network,
 	Promise: PromiseAPI,
 	GlobalClock: GlobalClock,
 	Signal: SignalAPI,
 	Attributes: { [string]: any },
-	Instance: Instance,
+	Instance: ZoneComponentInstance,
 }
 
 export type BattleService = {
@@ -430,16 +728,16 @@ export type BattleService = {
 	Import: ServiceImportFn,
 	OnInit: (self: BattleService, cb: (self: BattleService) -> ()) -> BattleService,
 	OnStart: (self: BattleService, cb: (self: BattleService) -> ()) -> BattleService,
-	OnTick: (self: BattleService, cb: (self: BattleService, deltaTime: number) -> (), rate: number, priority: number?) -> BattleService,
-	OnSimulation: (self: BattleService, cb: (self: BattleService, deltaTime: number) -> (), frequency: Enum.StepFrequency?, priority: number?) -> BattleService,
+	OnTick: ((self: BattleService, cb: (self: BattleService, deltaTime: number) -> (), rate: number) -> BattleService) & ((self: BattleService, cb: (self: BattleService, deltaTime: number) -> (), rate: number, priority: number?) -> BattleService),
+	OnSimulation: ((self: BattleService, cb: (self: BattleService, deltaTime: number) -> ()) -> BattleService) & ((self: BattleService, cb: (self: BattleService, deltaTime: number) -> (), frequency: Enum.StepFrequency?) -> BattleService) & ((self: BattleService, cb: (self: BattleService, deltaTime: number) -> (), frequency: Enum.StepFrequency?, priority: number?) -> BattleService),
 	OnDestroy: (self: BattleService, cb: (self: BattleService) -> ()) -> BattleService,
 	Tag: (self: BattleService, tag: string) -> BattleService,
 	ClassName: (self: BattleService, className: string) -> BattleService,
 	AttributeDefaults: (self: BattleService, schema: { [string]: any }) -> BattleService,
 	Children: (self: BattleService, children: { string }) -> BattleService,
-	GetAllComponents: (self: BattleService, id: string) -> any,
-	GetComponent: (self: BattleService, instance: Instance, id: string) -> any,
 	New: (self: BattleService, ID: string, Type: Type) -> BattleService,
+	GetComponent: GetComponentFn,
+	GetAllComponents: GetAllComponentsFn,
 	Cleanup: <T>(self: any, task: T) -> T,
 	Network: Network,
 	Promise: PromiseAPI,
@@ -460,7 +758,7 @@ export type ClassService = {
 	Unlock: (self: ClassService, player: Player, identifier: number | string) -> boolean,
 	Lock: (self: ClassService, player: Player, identifier: number | string) -> boolean,
 	GetEquipped: (self: ClassService, player: Player) -> AnyClassDefinition?,
-	Apply: (self: ClassService, player: Player, character: Model?) -> boolean,
+	Apply: ((self: ClassService, player: Player) -> boolean) & ((self: ClassService, player: Player, character: Model?) -> boolean),
 	Equip: (self: ClassService, player: Player, identifier: number | string) -> boolean,
 	Unequip: (self: ClassService, player: Player) -> boolean,
 	Classes: { [number]: AnyClassDefinition },
@@ -473,16 +771,16 @@ export type ClassService = {
 	Import: ServiceImportFn,
 	OnInit: (self: ClassService, cb: (self: ClassService) -> ()) -> ClassService,
 	OnStart: (self: ClassService, cb: (self: ClassService) -> ()) -> ClassService,
-	OnTick: (self: ClassService, cb: (self: ClassService, deltaTime: number) -> (), rate: number, priority: number?) -> ClassService,
-	OnSimulation: (self: ClassService, cb: (self: ClassService, deltaTime: number) -> (), frequency: Enum.StepFrequency?, priority: number?) -> ClassService,
+	OnTick: ((self: ClassService, cb: (self: ClassService, deltaTime: number) -> (), rate: number) -> ClassService) & ((self: ClassService, cb: (self: ClassService, deltaTime: number) -> (), rate: number, priority: number?) -> ClassService),
+	OnSimulation: ((self: ClassService, cb: (self: ClassService, deltaTime: number) -> ()) -> ClassService) & ((self: ClassService, cb: (self: ClassService, deltaTime: number) -> (), frequency: Enum.StepFrequency?) -> ClassService) & ((self: ClassService, cb: (self: ClassService, deltaTime: number) -> (), frequency: Enum.StepFrequency?, priority: number?) -> ClassService),
 	OnDestroy: (self: ClassService, cb: (self: ClassService) -> ()) -> ClassService,
 	Tag: (self: ClassService, tag: string) -> ClassService,
 	ClassName: (self: ClassService, className: string) -> ClassService,
 	AttributeDefaults: (self: ClassService, schema: { [string]: any }) -> ClassService,
 	Children: (self: ClassService, children: { string }) -> ClassService,
-	GetAllComponents: (self: ClassService, id: string) -> any,
-	GetComponent: (self: ClassService, instance: Instance, id: string) -> any,
 	New: (self: ClassService, ID: string, Type: Type) -> ClassService,
+	GetComponent: GetComponentFn,
+	GetAllComponents: GetAllComponentsFn,
 	Cleanup: <T>(self: any, task: T) -> T,
 	Network: Network,
 	Promise: PromiseAPI,
@@ -508,16 +806,41 @@ export type DayNightService = {
 	Import: ServiceImportFn,
 	OnInit: (self: DayNightService, cb: (self: DayNightService) -> ()) -> DayNightService,
 	OnStart: (self: DayNightService, cb: (self: DayNightService) -> ()) -> DayNightService,
-	OnTick: (self: DayNightService, cb: (self: DayNightService, deltaTime: number) -> (), rate: number, priority: number?) -> DayNightService,
-	OnSimulation: (self: DayNightService, cb: (self: DayNightService, deltaTime: number) -> (), frequency: Enum.StepFrequency?, priority: number?) -> DayNightService,
+	OnTick: ((self: DayNightService, cb: (self: DayNightService, deltaTime: number) -> (), rate: number) -> DayNightService) & ((self: DayNightService, cb: (self: DayNightService, deltaTime: number) -> (), rate: number, priority: number?) -> DayNightService),
+	OnSimulation: ((self: DayNightService, cb: (self: DayNightService, deltaTime: number) -> ()) -> DayNightService) & ((self: DayNightService, cb: (self: DayNightService, deltaTime: number) -> (), frequency: Enum.StepFrequency?) -> DayNightService) & ((self: DayNightService, cb: (self: DayNightService, deltaTime: number) -> (), frequency: Enum.StepFrequency?, priority: number?) -> DayNightService),
 	OnDestroy: (self: DayNightService, cb: (self: DayNightService) -> ()) -> DayNightService,
 	Tag: (self: DayNightService, tag: string) -> DayNightService,
 	ClassName: (self: DayNightService, className: string) -> DayNightService,
 	AttributeDefaults: (self: DayNightService, schema: { [string]: any }) -> DayNightService,
 	Children: (self: DayNightService, children: { string }) -> DayNightService,
-	GetAllComponents: (self: DayNightService, id: string) -> any,
-	GetComponent: (self: DayNightService, instance: Instance, id: string) -> any,
 	New: (self: DayNightService, ID: string, Type: Type) -> DayNightService,
+	GetComponent: GetComponentFn,
+	GetAllComponents: GetAllComponentsFn,
+	Cleanup: <T>(self: any, task: T) -> T,
+	Network: Network,
+	Promise: PromiseAPI,
+	GlobalClock: GlobalClock,
+	Signal: SignalAPI,
+	Attributes: { [string]: any },
+}
+
+export type EnemyService = {
+	ID: string,
+	Type: Type,
+	Extend: (self: EnemyService, id: "PlayerZoneComponent") -> EnemyService,
+	Import: ServiceImportFn,
+	OnInit: (self: EnemyService, cb: (self: EnemyService) -> ()) -> EnemyService,
+	OnStart: (self: EnemyService, cb: (self: EnemyService) -> ()) -> EnemyService,
+	OnTick: ((self: EnemyService, cb: (self: EnemyService, deltaTime: number) -> (), rate: number) -> EnemyService) & ((self: EnemyService, cb: (self: EnemyService, deltaTime: number) -> (), rate: number, priority: number?) -> EnemyService),
+	OnSimulation: ((self: EnemyService, cb: (self: EnemyService, deltaTime: number) -> ()) -> EnemyService) & ((self: EnemyService, cb: (self: EnemyService, deltaTime: number) -> (), frequency: Enum.StepFrequency?) -> EnemyService) & ((self: EnemyService, cb: (self: EnemyService, deltaTime: number) -> (), frequency: Enum.StepFrequency?, priority: number?) -> EnemyService),
+	OnDestroy: (self: EnemyService, cb: (self: EnemyService) -> ()) -> EnemyService,
+	Tag: (self: EnemyService, tag: string) -> EnemyService,
+	ClassName: (self: EnemyService, className: string) -> EnemyService,
+	AttributeDefaults: (self: EnemyService, schema: { [string]: any }) -> EnemyService,
+	Children: (self: EnemyService, children: { string }) -> EnemyService,
+	New: (self: EnemyService, ID: string, Type: Type) -> EnemyService,
+	GetComponent: GetComponentFn,
+	GetAllComponents: GetAllComponentsFn,
 	Cleanup: <T>(self: any, task: T) -> T,
 	Network: Network,
 	Promise: PromiseAPI,
@@ -529,7 +852,6 @@ export type DayNightService = {
 export type GameService = {
 	ID: string,
 	Type: Type,
-	LeaderstatsService: LeaderstatsService,
 	DayNightService: DayNightService,
 	CurrentState: GameStates,
 	OnBegin: Signal<>,
@@ -540,16 +862,16 @@ export type GameService = {
 	Import: ServiceImportFn,
 	OnInit: (self: GameService, cb: (self: GameService) -> ()) -> GameService,
 	OnStart: (self: GameService, cb: (self: GameService) -> ()) -> GameService,
-	OnTick: (self: GameService, cb: (self: GameService, deltaTime: number) -> (), rate: number, priority: number?) -> GameService,
-	OnSimulation: (self: GameService, cb: (self: GameService, deltaTime: number) -> (), frequency: Enum.StepFrequency?, priority: number?) -> GameService,
+	OnTick: ((self: GameService, cb: (self: GameService, deltaTime: number) -> (), rate: number) -> GameService) & ((self: GameService, cb: (self: GameService, deltaTime: number) -> (), rate: number, priority: number?) -> GameService),
+	OnSimulation: ((self: GameService, cb: (self: GameService, deltaTime: number) -> ()) -> GameService) & ((self: GameService, cb: (self: GameService, deltaTime: number) -> (), frequency: Enum.StepFrequency?) -> GameService) & ((self: GameService, cb: (self: GameService, deltaTime: number) -> (), frequency: Enum.StepFrequency?, priority: number?) -> GameService),
 	OnDestroy: (self: GameService, cb: (self: GameService) -> ()) -> GameService,
 	Tag: (self: GameService, tag: string) -> GameService,
 	ClassName: (self: GameService, className: string) -> GameService,
 	AttributeDefaults: (self: GameService, schema: { [string]: any }) -> GameService,
 	Children: (self: GameService, children: { string }) -> GameService,
-	GetAllComponents: (self: GameService, id: string) -> any,
-	GetComponent: (self: GameService, instance: Instance, id: string) -> any,
 	New: (self: GameService, ID: string, Type: Type) -> GameService,
+	GetComponent: GetComponentFn,
+	GetAllComponents: GetAllComponentsFn,
 	Cleanup: <T>(self: any, task: T) -> T,
 	Network: Network,
 	Promise: PromiseAPI,
@@ -565,16 +887,16 @@ export type GeneratorService = {
 	Import: ServiceImportFn,
 	OnInit: (self: GeneratorService, cb: (self: GeneratorService) -> ()) -> GeneratorService,
 	OnStart: (self: GeneratorService, cb: (self: GeneratorService) -> ()) -> GeneratorService,
-	OnTick: (self: GeneratorService, cb: (self: GeneratorService, deltaTime: number) -> (), rate: number, priority: number?) -> GeneratorService,
-	OnSimulation: (self: GeneratorService, cb: (self: GeneratorService, deltaTime: number) -> (), frequency: Enum.StepFrequency?, priority: number?) -> GeneratorService,
+	OnTick: ((self: GeneratorService, cb: (self: GeneratorService, deltaTime: number) -> (), rate: number) -> GeneratorService) & ((self: GeneratorService, cb: (self: GeneratorService, deltaTime: number) -> (), rate: number, priority: number?) -> GeneratorService),
+	OnSimulation: ((self: GeneratorService, cb: (self: GeneratorService, deltaTime: number) -> ()) -> GeneratorService) & ((self: GeneratorService, cb: (self: GeneratorService, deltaTime: number) -> (), frequency: Enum.StepFrequency?) -> GeneratorService) & ((self: GeneratorService, cb: (self: GeneratorService, deltaTime: number) -> (), frequency: Enum.StepFrequency?, priority: number?) -> GeneratorService),
 	OnDestroy: (self: GeneratorService, cb: (self: GeneratorService) -> ()) -> GeneratorService,
 	Tag: (self: GeneratorService, tag: string) -> GeneratorService,
 	ClassName: (self: GeneratorService, className: string) -> GeneratorService,
 	AttributeDefaults: (self: GeneratorService, schema: { [string]: any }) -> GeneratorService,
 	Children: (self: GeneratorService, children: { string }) -> GeneratorService,
-	GetAllComponents: (self: GeneratorService, id: string) -> any,
-	GetComponent: (self: GeneratorService, instance: Instance, id: string) -> any,
 	New: (self: GeneratorService, ID: string, Type: Type) -> GeneratorService,
+	GetComponent: GetComponentFn,
+	GetAllComponents: GetAllComponentsFn,
 	Cleanup: <T>(self: any, task: T) -> T,
 	Network: Network,
 	Promise: PromiseAPI,
@@ -586,22 +908,20 @@ export type GeneratorService = {
 export type LeaderstatsService = {
 	ID: string,
 	Type: Type,
-	PlayerService: PlayerService,
-	ProfileService: ProfileService,
 	Extend: (self: LeaderstatsService, id: "PlayerZoneComponent") -> LeaderstatsService,
 	Import: ServiceImportFn,
 	OnInit: (self: LeaderstatsService, cb: (self: LeaderstatsService) -> ()) -> LeaderstatsService,
 	OnStart: (self: LeaderstatsService, cb: (self: LeaderstatsService) -> ()) -> LeaderstatsService,
-	OnTick: (self: LeaderstatsService, cb: (self: LeaderstatsService, deltaTime: number) -> (), rate: number, priority: number?) -> LeaderstatsService,
-	OnSimulation: (self: LeaderstatsService, cb: (self: LeaderstatsService, deltaTime: number) -> (), frequency: Enum.StepFrequency?, priority: number?) -> LeaderstatsService,
+	OnTick: ((self: LeaderstatsService, cb: (self: LeaderstatsService, deltaTime: number) -> (), rate: number) -> LeaderstatsService) & ((self: LeaderstatsService, cb: (self: LeaderstatsService, deltaTime: number) -> (), rate: number, priority: number?) -> LeaderstatsService),
+	OnSimulation: ((self: LeaderstatsService, cb: (self: LeaderstatsService, deltaTime: number) -> ()) -> LeaderstatsService) & ((self: LeaderstatsService, cb: (self: LeaderstatsService, deltaTime: number) -> (), frequency: Enum.StepFrequency?) -> LeaderstatsService) & ((self: LeaderstatsService, cb: (self: LeaderstatsService, deltaTime: number) -> (), frequency: Enum.StepFrequency?, priority: number?) -> LeaderstatsService),
 	OnDestroy: (self: LeaderstatsService, cb: (self: LeaderstatsService) -> ()) -> LeaderstatsService,
 	Tag: (self: LeaderstatsService, tag: string) -> LeaderstatsService,
 	ClassName: (self: LeaderstatsService, className: string) -> LeaderstatsService,
 	AttributeDefaults: (self: LeaderstatsService, schema: { [string]: any }) -> LeaderstatsService,
 	Children: (self: LeaderstatsService, children: { string }) -> LeaderstatsService,
-	GetAllComponents: (self: LeaderstatsService, id: string) -> any,
-	GetComponent: (self: LeaderstatsService, instance: Instance, id: string) -> any,
 	New: (self: LeaderstatsService, ID: string, Type: Type) -> LeaderstatsService,
+	GetComponent: GetComponentFn,
+	GetAllComponents: GetAllComponentsFn,
 	Cleanup: <T>(self: any, task: T) -> T,
 	Network: Network,
 	Promise: PromiseAPI,
@@ -618,16 +938,16 @@ export type PlayerBilboardService = {
 	Import: ServiceImportFn,
 	OnInit: (self: PlayerBilboardService, cb: (self: PlayerBilboardService) -> ()) -> PlayerBilboardService,
 	OnStart: (self: PlayerBilboardService, cb: (self: PlayerBilboardService) -> ()) -> PlayerBilboardService,
-	OnTick: (self: PlayerBilboardService, cb: (self: PlayerBilboardService, deltaTime: number) -> (), rate: number, priority: number?) -> PlayerBilboardService,
-	OnSimulation: (self: PlayerBilboardService, cb: (self: PlayerBilboardService, deltaTime: number) -> (), frequency: Enum.StepFrequency?, priority: number?) -> PlayerBilboardService,
+	OnTick: ((self: PlayerBilboardService, cb: (self: PlayerBilboardService, deltaTime: number) -> (), rate: number) -> PlayerBilboardService) & ((self: PlayerBilboardService, cb: (self: PlayerBilboardService, deltaTime: number) -> (), rate: number, priority: number?) -> PlayerBilboardService),
+	OnSimulation: ((self: PlayerBilboardService, cb: (self: PlayerBilboardService, deltaTime: number) -> ()) -> PlayerBilboardService) & ((self: PlayerBilboardService, cb: (self: PlayerBilboardService, deltaTime: number) -> (), frequency: Enum.StepFrequency?) -> PlayerBilboardService) & ((self: PlayerBilboardService, cb: (self: PlayerBilboardService, deltaTime: number) -> (), frequency: Enum.StepFrequency?, priority: number?) -> PlayerBilboardService),
 	OnDestroy: (self: PlayerBilboardService, cb: (self: PlayerBilboardService) -> ()) -> PlayerBilboardService,
 	Tag: (self: PlayerBilboardService, tag: string) -> PlayerBilboardService,
 	ClassName: (self: PlayerBilboardService, className: string) -> PlayerBilboardService,
 	AttributeDefaults: (self: PlayerBilboardService, schema: { [string]: any }) -> PlayerBilboardService,
 	Children: (self: PlayerBilboardService, children: { string }) -> PlayerBilboardService,
-	GetAllComponents: (self: PlayerBilboardService, id: string) -> any,
-	GetComponent: (self: PlayerBilboardService, instance: Instance, id: string) -> any,
 	New: (self: PlayerBilboardService, ID: string, Type: Type) -> PlayerBilboardService,
+	GetComponent: GetComponentFn,
+	GetAllComponents: GetAllComponentsFn,
 	Cleanup: <T>(self: any, task: T) -> T,
 	Network: Network,
 	Promise: PromiseAPI,
@@ -643,20 +963,24 @@ export type PlayerService = {
 	OnPlayerRemoved: (self: PlayerService, callback: (Player: Player) -> ()) -> (),
 	OnCharacterAdded: (self: PlayerService, callback: (Character: R6, Player: Player) -> ()) -> (),
 	OnCharacterRemoved: (self: PlayerService, callback: (Character: R6, Player: Player) -> ()) -> (),
+	GetAllPlayers: (self: PlayerService) -> { Player },
+	GetAllCharacters: (self: PlayerService) -> { R6 },
+	allPlayers: { [number]: Player },
+	allCharacters: { [number]: R6 },
 	Extend: (self: PlayerService, id: "PlayerZoneComponent") -> PlayerService,
 	Import: ServiceImportFn,
 	OnInit: (self: PlayerService, cb: (self: PlayerService) -> ()) -> PlayerService,
 	OnStart: (self: PlayerService, cb: (self: PlayerService) -> ()) -> PlayerService,
-	OnTick: (self: PlayerService, cb: (self: PlayerService, deltaTime: number) -> (), rate: number, priority: number?) -> PlayerService,
-	OnSimulation: (self: PlayerService, cb: (self: PlayerService, deltaTime: number) -> (), frequency: Enum.StepFrequency?, priority: number?) -> PlayerService,
+	OnTick: ((self: PlayerService, cb: (self: PlayerService, deltaTime: number) -> (), rate: number) -> PlayerService) & ((self: PlayerService, cb: (self: PlayerService, deltaTime: number) -> (), rate: number, priority: number?) -> PlayerService),
+	OnSimulation: ((self: PlayerService, cb: (self: PlayerService, deltaTime: number) -> ()) -> PlayerService) & ((self: PlayerService, cb: (self: PlayerService, deltaTime: number) -> (), frequency: Enum.StepFrequency?) -> PlayerService) & ((self: PlayerService, cb: (self: PlayerService, deltaTime: number) -> (), frequency: Enum.StepFrequency?, priority: number?) -> PlayerService),
 	OnDestroy: (self: PlayerService, cb: (self: PlayerService) -> ()) -> PlayerService,
 	Tag: (self: PlayerService, tag: string) -> PlayerService,
 	ClassName: (self: PlayerService, className: string) -> PlayerService,
 	AttributeDefaults: (self: PlayerService, schema: { [string]: any }) -> PlayerService,
 	Children: (self: PlayerService, children: { string }) -> PlayerService,
-	GetAllComponents: (self: PlayerService, id: string) -> any,
-	GetComponent: (self: PlayerService, instance: Instance, id: string) -> any,
 	New: (self: PlayerService, ID: string, Type: Type) -> PlayerService,
+	GetComponent: GetComponentFn,
+	GetAllComponents: GetAllComponentsFn,
 	Cleanup: <T>(self: any, task: T) -> T,
 	Network: Network,
 	Promise: PromiseAPI,
@@ -681,16 +1005,42 @@ export type ProfileService = {
 	Import: ServiceImportFn,
 	OnInit: (self: ProfileService, cb: (self: ProfileService) -> ()) -> ProfileService,
 	OnStart: (self: ProfileService, cb: (self: ProfileService) -> ()) -> ProfileService,
-	OnTick: (self: ProfileService, cb: (self: ProfileService, deltaTime: number) -> (), rate: number, priority: number?) -> ProfileService,
-	OnSimulation: (self: ProfileService, cb: (self: ProfileService, deltaTime: number) -> (), frequency: Enum.StepFrequency?, priority: number?) -> ProfileService,
+	OnTick: ((self: ProfileService, cb: (self: ProfileService, deltaTime: number) -> (), rate: number) -> ProfileService) & ((self: ProfileService, cb: (self: ProfileService, deltaTime: number) -> (), rate: number, priority: number?) -> ProfileService),
+	OnSimulation: ((self: ProfileService, cb: (self: ProfileService, deltaTime: number) -> ()) -> ProfileService) & ((self: ProfileService, cb: (self: ProfileService, deltaTime: number) -> (), frequency: Enum.StepFrequency?) -> ProfileService) & ((self: ProfileService, cb: (self: ProfileService, deltaTime: number) -> (), frequency: Enum.StepFrequency?, priority: number?) -> ProfileService),
 	OnDestroy: (self: ProfileService, cb: (self: ProfileService) -> ()) -> ProfileService,
 	Tag: (self: ProfileService, tag: string) -> ProfileService,
 	ClassName: (self: ProfileService, className: string) -> ProfileService,
 	AttributeDefaults: (self: ProfileService, schema: { [string]: any }) -> ProfileService,
 	Children: (self: ProfileService, children: { string }) -> ProfileService,
-	GetAllComponents: (self: ProfileService, id: string) -> any,
-	GetComponent: (self: ProfileService, instance: Instance, id: string) -> any,
 	New: (self: ProfileService, ID: string, Type: Type) -> ProfileService,
+	GetComponent: GetComponentFn,
+	GetAllComponents: GetAllComponentsFn,
+	Cleanup: <T>(self: any, task: T) -> T,
+	Network: Network,
+	Promise: PromiseAPI,
+	GlobalClock: GlobalClock,
+	Signal: SignalAPI,
+	Attributes: { [string]: any },
+}
+
+export type VitalService = {
+	ID: string,
+	Type: Type,
+	PlayerService: PlayerService,
+	Extend: (self: VitalService, id: "PlayerZoneComponent") -> VitalService,
+	Import: ServiceImportFn,
+	OnInit: (self: VitalService, cb: (self: VitalService) -> ()) -> VitalService,
+	OnStart: (self: VitalService, cb: (self: VitalService) -> ()) -> VitalService,
+	OnTick: ((self: VitalService, cb: (self: VitalService, deltaTime: number) -> (), rate: number) -> VitalService) & ((self: VitalService, cb: (self: VitalService, deltaTime: number) -> (), rate: number, priority: number?) -> VitalService),
+	OnSimulation: ((self: VitalService, cb: (self: VitalService, deltaTime: number) -> ()) -> VitalService) & ((self: VitalService, cb: (self: VitalService, deltaTime: number) -> (), frequency: Enum.StepFrequency?) -> VitalService) & ((self: VitalService, cb: (self: VitalService, deltaTime: number) -> (), frequency: Enum.StepFrequency?, priority: number?) -> VitalService),
+	OnDestroy: (self: VitalService, cb: (self: VitalService) -> ()) -> VitalService,
+	Tag: (self: VitalService, tag: string) -> VitalService,
+	ClassName: (self: VitalService, className: string) -> VitalService,
+	AttributeDefaults: (self: VitalService, schema: { [string]: any }) -> VitalService,
+	Children: (self: VitalService, children: { string }) -> VitalService,
+	New: (self: VitalService, ID: string, Type: Type) -> VitalService,
+	GetComponent: GetComponentFn,
+	GetAllComponents: GetAllComponentsFn,
 	Cleanup: <T>(self: any, task: T) -> T,
 	Network: Network,
 	Promise: PromiseAPI,
@@ -703,7 +1053,6 @@ export type ZoneService = {
 	ID: string,
 	Type: Type,
 	ProfileService: ProfileService,
-	PlayerService: PlayerService,
 	ChangePlayerZone: (self: ZoneService, Player: Player, Zone: any) -> (),
 	ChangePlayerSafeZone: (self: ZoneService, Player: Player, Zone: any) -> (),
 	zonePlayers: { [Player]: string },
@@ -712,16 +1061,16 @@ export type ZoneService = {
 	Import: ServiceImportFn,
 	OnInit: (self: ZoneService, cb: (self: ZoneService) -> ()) -> ZoneService,
 	OnStart: (self: ZoneService, cb: (self: ZoneService) -> ()) -> ZoneService,
-	OnTick: (self: ZoneService, cb: (self: ZoneService, deltaTime: number) -> (), rate: number, priority: number?) -> ZoneService,
-	OnSimulation: (self: ZoneService, cb: (self: ZoneService, deltaTime: number) -> (), frequency: Enum.StepFrequency?, priority: number?) -> ZoneService,
+	OnTick: ((self: ZoneService, cb: (self: ZoneService, deltaTime: number) -> (), rate: number) -> ZoneService) & ((self: ZoneService, cb: (self: ZoneService, deltaTime: number) -> (), rate: number, priority: number?) -> ZoneService),
+	OnSimulation: ((self: ZoneService, cb: (self: ZoneService, deltaTime: number) -> ()) -> ZoneService) & ((self: ZoneService, cb: (self: ZoneService, deltaTime: number) -> (), frequency: Enum.StepFrequency?) -> ZoneService) & ((self: ZoneService, cb: (self: ZoneService, deltaTime: number) -> (), frequency: Enum.StepFrequency?, priority: number?) -> ZoneService),
 	OnDestroy: (self: ZoneService, cb: (self: ZoneService) -> ()) -> ZoneService,
 	Tag: (self: ZoneService, tag: string) -> ZoneService,
 	ClassName: (self: ZoneService, className: string) -> ZoneService,
 	AttributeDefaults: (self: ZoneService, schema: { [string]: any }) -> ZoneService,
 	Children: (self: ZoneService, children: { string }) -> ZoneService,
-	GetAllComponents: (self: ZoneService, id: string) -> any,
-	GetComponent: (self: ZoneService, instance: Instance, id: string) -> any,
 	New: (self: ZoneService, ID: string, Type: Type) -> ZoneService,
+	GetComponent: GetComponentFn,
+	GetAllComponents: GetAllComponentsFn,
 	Cleanup: <T>(self: any, task: T) -> T,
 	Network: Network,
 	Promise: PromiseAPI,
@@ -740,16 +1089,16 @@ export type PlayerZoneComponent = {
 	Import: ImportFn,
 	OnInit: (self: PlayerZoneComponent, cb: (self: PlayerZoneComponent) -> ()) -> PlayerZoneComponent,
 	OnStart: (self: PlayerZoneComponent, cb: (self: PlayerZoneComponent) -> ()) -> PlayerZoneComponent,
-	OnTick: (self: PlayerZoneComponent, cb: (self: PlayerZoneComponent, deltaTime: number) -> (), rate: number, priority: number?) -> PlayerZoneComponent,
-	OnSimulation: (self: PlayerZoneComponent, cb: (self: PlayerZoneComponent, deltaTime: number) -> (), frequency: Enum.StepFrequency?, priority: number?) -> PlayerZoneComponent,
+	OnTick: ((self: PlayerZoneComponent, cb: (self: PlayerZoneComponent, deltaTime: number) -> (), rate: number) -> PlayerZoneComponent) & ((self: PlayerZoneComponent, cb: (self: PlayerZoneComponent, deltaTime: number) -> (), rate: number, priority: number?) -> PlayerZoneComponent),
+	OnSimulation: ((self: PlayerZoneComponent, cb: (self: PlayerZoneComponent, deltaTime: number) -> ()) -> PlayerZoneComponent) & ((self: PlayerZoneComponent, cb: (self: PlayerZoneComponent, deltaTime: number) -> (), frequency: Enum.StepFrequency?) -> PlayerZoneComponent) & ((self: PlayerZoneComponent, cb: (self: PlayerZoneComponent, deltaTime: number) -> (), frequency: Enum.StepFrequency?, priority: number?) -> PlayerZoneComponent),
 	OnDestroy: (self: PlayerZoneComponent, cb: (self: PlayerZoneComponent) -> ()) -> PlayerZoneComponent,
 	Tag: (self: PlayerZoneComponent, tag: string) -> PlayerZoneComponent,
 	ClassName: (self: PlayerZoneComponent, className: string) -> PlayerZoneComponent,
 	AttributeDefaults: (self: PlayerZoneComponent, schema: { [string]: any }) -> PlayerZoneComponent,
 	Children: (self: PlayerZoneComponent, children: { string }) -> PlayerZoneComponent,
-	GetAllComponents: (self: PlayerZoneComponent, id: string) -> any,
-	GetComponent: (self: PlayerZoneComponent, instance: Instance, id: string) -> any,
 	New: (self: PlayerZoneComponent, ID: string, Type: Type) -> PlayerZoneComponent,
+	GetComponent: GetComponentFn,
+	GetAllComponents: GetAllComponentsFn,
 	Cleanup: <T>(self: any, task: T) -> T,
 	Network: Network,
 	Promise: PromiseAPI,
@@ -768,23 +1117,23 @@ export type RegionComponent = {
 	Import: ComponentImportFn,
 	OnInit: (self: RegionComponent, cb: (self: RegionComponent) -> ()) -> RegionComponent,
 	OnStart: (self: RegionComponent, cb: (self: RegionComponent) -> ()) -> RegionComponent,
-	OnTick: (self: RegionComponent, cb: (self: RegionComponent, deltaTime: number) -> (), rate: number, priority: number?) -> RegionComponent,
-	OnSimulation: (self: RegionComponent, cb: (self: RegionComponent, deltaTime: number) -> (), frequency: Enum.StepFrequency?, priority: number?) -> RegionComponent,
+	OnTick: ((self: RegionComponent, cb: (self: RegionComponent, deltaTime: number) -> (), rate: number) -> RegionComponent) & ((self: RegionComponent, cb: (self: RegionComponent, deltaTime: number) -> (), rate: number, priority: number?) -> RegionComponent),
+	OnSimulation: ((self: RegionComponent, cb: (self: RegionComponent, deltaTime: number) -> ()) -> RegionComponent) & ((self: RegionComponent, cb: (self: RegionComponent, deltaTime: number) -> (), frequency: Enum.StepFrequency?) -> RegionComponent) & ((self: RegionComponent, cb: (self: RegionComponent, deltaTime: number) -> (), frequency: Enum.StepFrequency?, priority: number?) -> RegionComponent),
 	OnDestroy: (self: RegionComponent, cb: (self: RegionComponent) -> ()) -> RegionComponent,
 	Tag: (self: RegionComponent, tag: string) -> RegionComponent,
 	ClassName: (self: RegionComponent, className: string) -> RegionComponent,
 	AttributeDefaults: (self: RegionComponent, schema: { [string]: any }) -> RegionComponent,
 	Children: (self: RegionComponent, children: { string }) -> RegionComponent,
-	GetAllComponents: (self: RegionComponent, id: string) -> any,
-	GetComponent: (self: RegionComponent, instance: Instance, id: string) -> any,
 	New: (self: RegionComponent, ID: string, Type: Type) -> RegionComponent,
+	GetComponent: GetComponentFn,
+	GetAllComponents: GetAllComponentsFn,
 	Cleanup: <T>(self: any, task: T) -> T,
 	Network: Network,
 	Promise: PromiseAPI,
 	GlobalClock: GlobalClock,
 	Signal: SignalAPI,
 	Attributes: { [string]: any },
-	Instance: Instance,
+	Instance: RegionComponentInstance,
 }
 
 export type SolarPanelComponent = {
@@ -797,23 +1146,23 @@ export type SolarPanelComponent = {
 	Import: ComponentImportFn,
 	OnInit: (self: SolarPanelComponent, cb: (self: SolarPanelComponent) -> ()) -> SolarPanelComponent,
 	OnStart: (self: SolarPanelComponent, cb: (self: SolarPanelComponent) -> ()) -> SolarPanelComponent,
-	OnTick: (self: SolarPanelComponent, cb: (self: SolarPanelComponent, deltaTime: number) -> (), rate: number, priority: number?) -> SolarPanelComponent,
-	OnSimulation: (self: SolarPanelComponent, cb: (self: SolarPanelComponent, deltaTime: number) -> (), frequency: Enum.StepFrequency?, priority: number?) -> SolarPanelComponent,
+	OnTick: ((self: SolarPanelComponent, cb: (self: SolarPanelComponent, deltaTime: number) -> (), rate: number) -> SolarPanelComponent) & ((self: SolarPanelComponent, cb: (self: SolarPanelComponent, deltaTime: number) -> (), rate: number, priority: number?) -> SolarPanelComponent),
+	OnSimulation: ((self: SolarPanelComponent, cb: (self: SolarPanelComponent, deltaTime: number) -> ()) -> SolarPanelComponent) & ((self: SolarPanelComponent, cb: (self: SolarPanelComponent, deltaTime: number) -> (), frequency: Enum.StepFrequency?) -> SolarPanelComponent) & ((self: SolarPanelComponent, cb: (self: SolarPanelComponent, deltaTime: number) -> (), frequency: Enum.StepFrequency?, priority: number?) -> SolarPanelComponent),
 	OnDestroy: (self: SolarPanelComponent, cb: (self: SolarPanelComponent) -> ()) -> SolarPanelComponent,
 	Tag: (self: SolarPanelComponent, tag: string) -> SolarPanelComponent,
 	ClassName: (self: SolarPanelComponent, className: string) -> SolarPanelComponent,
 	AttributeDefaults: (self: SolarPanelComponent, schema: { [string]: any }) -> SolarPanelComponent,
 	Children: (self: SolarPanelComponent, children: { string }) -> SolarPanelComponent,
-	GetAllComponents: (self: SolarPanelComponent, id: string) -> any,
-	GetComponent: (self: SolarPanelComponent, instance: Instance, id: string) -> any,
 	New: (self: SolarPanelComponent, ID: string, Type: Type) -> SolarPanelComponent,
+	GetComponent: GetComponentFn,
+	GetAllComponents: GetAllComponentsFn,
 	Cleanup: <T>(self: any, task: T) -> T,
 	Network: Network,
 	Promise: PromiseAPI,
 	GlobalClock: GlobalClock,
 	Signal: SignalAPI,
 	Attributes: { [string]: any },
-	Instance: Instance,
+	Instance: SolarPanelComponentInstance,
 }
 
 --> IMPORT FUNCTIONS
@@ -824,30 +1173,36 @@ export type ServiceImportFn =
 	(<Self>(self: Self, id: "BattleService", scopeKey: string?) -> Self) &
 	(<Self>(self: Self, id: "ClassService", scopeKey: string?) -> Self) &
 	(<Self>(self: Self, id: "DayNightService", scopeKey: string?) -> Self) &
+	(<Self>(self: Self, id: "EnemyService", scopeKey: string?) -> Self) &
 	(<Self>(self: Self, id: "GameService", scopeKey: string?) -> Self) &
 	(<Self>(self: Self, id: "GeneratorService", scopeKey: string?) -> Self) &
 	(<Self>(self: Self, id: "LeaderstatsService", scopeKey: string?) -> Self) &
 	(<Self>(self: Self, id: "PlayerBilboardService", scopeKey: string?) -> Self) &
 	(<Self>(self: Self, id: "PlayerService", scopeKey: string?) -> Self) &
 	(<Self>(self: Self, id: "ProfileService", scopeKey: string?) -> Self) &
+	(<Self>(self: Self, id: "VitalService", scopeKey: string?) -> Self) &
 	(<Self>(self: Self, id: "ZoneService", scopeKey: string?) -> Self)
 
 export type ControllerImportFn =
 	(<Self>(self: Self, id: "DayCycleController", scopeKey: string?) -> Self) &
 	(<Self>(self: Self, id: "NotificationController", scopeKey: string?) -> Self) &
 	(<Self>(self: Self, id: "ProfileController", scopeKey: string?) -> Self) &
-	(<Self>(self: Self, id: "ScreenController", scopeKey: string?) -> Self)
+	(<Self>(self: Self, id: "ScreenController", scopeKey: string?) -> Self) &
+	(<Self>(self: Self, id: "UIAnimationsController", scopeKey: string?) -> Self) &
+	(<Self>(self: Self, id: "VitalController", scopeKey: string?) -> Self)
 
 export type ComponentImportFn =
 	(<Self>(self: Self, id: "BattleService", scopeKey: string?) -> Self) &
 	(<Self>(self: Self, id: "ClassService", scopeKey: string?) -> Self) &
 	(<Self>(self: Self, id: "DayNightService", scopeKey: string?) -> Self) &
+	(<Self>(self: Self, id: "EnemyService", scopeKey: string?) -> Self) &
 	(<Self>(self: Self, id: "GameService", scopeKey: string?) -> Self) &
 	(<Self>(self: Self, id: "GeneratorService", scopeKey: string?) -> Self) &
 	(<Self>(self: Self, id: "LeaderstatsService", scopeKey: string?) -> Self) &
 	(<Self>(self: Self, id: "PlayerBilboardService", scopeKey: string?) -> Self) &
 	(<Self>(self: Self, id: "PlayerService", scopeKey: string?) -> Self) &
 	(<Self>(self: Self, id: "ProfileService", scopeKey: string?) -> Self) &
+	(<Self>(self: Self, id: "VitalService", scopeKey: string?) -> Self) &
 	(<Self>(self: Self, id: "ZoneService", scopeKey: string?) -> Self)
 
 --> EXTEND FUNCTIONS
@@ -866,26 +1221,50 @@ export type ComponentExtendFn =
 export type MixinExtendFn =
 	(<Self>(self: Self, id: "PlayerZoneComponent") -> Self)
 
+--> COMPONENT LOOKUP FUNCTIONS
+
+export type GetComponentFn =
+	(<Self>(self: Self, instance: AliensComponentInstance, id: "AliensComponent") -> AliensComponent?) &
+	(<Self>(self: Self, instance: RegionComponentInstance, id: "RegionComponent") -> RegionComponent?) &
+	(<Self>(self: Self, instance: SolarPanelComponentInstance, id: "SolarPanelComponent") -> SolarPanelComponent?) &
+	(<Self>(self: Self, instance: VitalComponentInstance, id: "VitalComponent") -> VitalComponent?) &
+	(<Self>(self: Self, instance: ZoneComponentInstance, id: "ZoneComponent") -> ZoneComponent?) &
+	(<Self>(self: Self, instance: Instance, id: string) -> any)
+
+export type GetAllComponentsFn =
+	(<Self>(self: Self, id: "AliensComponent") -> { AliensComponent }) &
+	(<Self>(self: Self, id: "RegionComponent") -> { RegionComponent }) &
+	(<Self>(self: Self, id: "SolarPanelComponent") -> { SolarPanelComponent }) &
+	(<Self>(self: Self, id: "VitalComponent") -> { VitalComponent }) &
+	(<Self>(self: Self, id: "ZoneComponent") -> { ZoneComponent }) &
+	(<Self>(self: Self, id: string) -> { any })
+
 --> MODUX OVERLOADS
 export type ServiceFn =
 	((id: "BattleService", mode: Mode?) -> BattleService) &
 	((id: "ClassService", mode: Mode?) -> ClassService) &
 	((id: "DayNightService", mode: Mode?) -> DayNightService) &
+	((id: "EnemyService", mode: Mode?) -> EnemyService) &
 	((id: "GameService", mode: Mode?) -> GameService) &
 	((id: "GeneratorService", mode: Mode?) -> GeneratorService) &
 	((id: "LeaderstatsService", mode: Mode?) -> LeaderstatsService) &
 	((id: "PlayerBilboardService", mode: Mode?) -> PlayerBilboardService) &
 	((id: "PlayerService", mode: Mode?) -> PlayerService) &
 	((id: "ProfileService", mode: Mode?) -> ProfileService) &
+	((id: "VitalService", mode: Mode?) -> VitalService) &
 	((id: "ZoneService", mode: Mode?) -> ZoneService)
 
 export type ControllerFn =
 	((id: "DayCycleController", mode: Mode?) -> DayCycleController) &
 	((id: "NotificationController", mode: Mode?) -> NotificationController) &
 	((id: "ProfileController", mode: Mode?) -> ProfileController) &
-	((id: "ScreenController", mode: Mode?) -> ScreenController)
+	((id: "ScreenController", mode: Mode?) -> ScreenController) &
+	((id: "UIAnimationsController", mode: Mode?) -> UIAnimationsController) &
+	((id: "VitalController", mode: Mode?) -> VitalController)
 
 export type ComponentFn =
+	((id: "AliensComponent", mode: Mode?) -> AliensComponent) &
+	((id: "VitalComponent", mode: Mode?) -> VitalComponent) &
 	((id: "ZoneComponent", mode: Mode?) -> ZoneComponent) &
 	((id: "RegionComponent", mode: Mode?) -> RegionComponent) &
 	((id: "SolarPanelComponent", mode: Mode?) -> SolarPanelComponent)

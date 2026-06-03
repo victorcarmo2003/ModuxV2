@@ -1,4 +1,5 @@
 --!strict
+local BugReporterService = game:GetService("BugReporterService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Types = require(ReplicatedStorage.Shared.Modux.Types)
 local lync = require(script.lync)
@@ -96,6 +97,18 @@ Network.Packages = {
 		"DayCycle",
 		Network.struct({
 			Message = Network.int(0, 10000),
+		})
+	),
+
+	VitalKey = Network.packet(
+		"VitalKey",
+		Network.tagged("key", {
+			Armor = Network.struct({ value = Network.int(0, 100) }),
+			Health = Network.struct({ value = Network.int(0, 100) }),
+			Hunger = Network.struct({ value = Network.int(0, 100) }),
+			Stamina = Network.struct({ value = Network.int(0, 100) }),
+			Oxygen = Network.struct({ value = Network.int(0, 300) }),
+			MaxOxygen = Network.struct({ value = Network.int(0, 300) }),
 		})
 	),
 }

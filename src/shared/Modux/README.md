@@ -20,6 +20,7 @@ Esses arquivos são gerados automaticamente. Não edite nenhum deles manualmente
 - [Import e Extend](#import-e-extend)
 - [Lifecycles e cleanup](#lifecycles-e-cleanup)
 - [Components](#components)
+- [Modux Doctor](#modux-doctor)
 - [Signals](#signals)
 - [Promise](#promise)
 - [Network e Lync](#network-e-lync)
@@ -331,6 +332,92 @@ local door = self:GetComponent(instance, "DoorComponent")
 local allDoors = self:GetAllComponents("DoorComponent")
 ```
 
+Quando o ID literal corresponde a um `Modux.Component`, os tipos gerados
+especializam automaticamente o retorno:
+
+```luau
+local door = self:GetComponent(instance, "DoorComponent") -- DoorComponent?
+local allDoors = self:GetAllComponents("DoorComponent") -- { DoorComponent }
+```
+
+`GetComponent()` retorna um valor opcional porque a instância pode não possuir
+um Component ativo. `GetAllComponents()` sempre retorna um array, mesmo quando
+nenhum Component daquele tipo está registrado.
+
+IDs calculados em runtime continuam aceitos por compatibilidade, com fallback
+para `any`:
+
+```luau
+local component = self:GetComponent(instance, componentId) -- any
+```
+
+A extensão sugere apenas IDs de `Modux.Component`. Mixins não aparecem nesses
+helpers. Um literal inexistente, como `"DoorComponet"`, gera erro no editor para
+facilitar a correção de typos.
+
+Os contratos também especializam a instância e os attributes:
+
+```luau
+local VitalComponent = Modux.Component("VitalComponent")
+	:Tag("Vital")
+	:ClassName("Player")
+	:AttributeDefaults({ Health = 100 })
+
+-- Tipos gerados:
+-- VitalComponent.Instance: Player
+-- VitalComponent.Attributes: { Health: number }
+```
+
+Consultas literais preservam esse contrato:
+
+```luau
+local vital = self:GetComponent(player, "VitalComponent") -- VitalComponent?
+```
+
+## Modux Doctor
+
+O tooling analisa os contratos de Components sem alterar o runtime. Com o
+companion opcional instalado no Roblox Studio, ele compara tags, classes,
+filhos obrigatórios e tipos de attributes antes do playtest.
+
+O Doctor também sinaliza imports ausentes ou não usados, dependências
+inacessíveis entre client/server/shared, connections sem `Cleanup`, packets
+Network inexistentes e cópias antigas divergentes fora de `src/`.
+
+Sem Studio conectado, análises estáticas continuam ativas. A ausência de uma
+instância observada é warning, pois tags criadas manualmente ou em runtime são
+válidas. Para uma exceção intencional, use uma supressão:
+
+```luau
+-- modux ignore line
+local RegionComponent = Modux.Component("RegionComponent"):Tag("Region")
+```
+
+`-- modux ignore line` ignora a próxima linha quando aparece isolado, ou a
+própria linha quando usado ao final do código. `-- modux ignore file` vale para
+o arquivo inteiro. Um código opcional restringe a supressão a uma regra:
+
+```luau
+Players.PlayerAdded:Connect(callback) -- modux ignore line cleanup-untracked-connection
+-- modux ignore file component-no-studio-instance
+```
+
+O VS Code sugere as diretivas e os códigos depois de `-- modux `. As formas
+legadas `modux-ignore-next-line` e `modux-ignore-file` continuam aceitas.
+
+Quando a origem é comprovável, o editor destaca o trecho semanticamente
+relacionado ao problema. Por exemplo, ausência de instância observada destaca a
+linha de `:Tag()`, classe incompatível destaca `:ClassName()` e filho ausente
+destaca a linha correspondente em `:Children()`.
+
+O widget **Modux Companion** no Studio oferece um Inspector somente leitura:
+
+- `Overview` resume a bridge, o snapshot e as quantidades observadas.
+- `Components` permite expandir contratos e selecionar instâncias no Explorer.
+- `Diagnostics` agrupa erros e warnings por severidade.
+
+As expansões e posições de scroll permanecem estáveis entre sincronizações.
+
 ## Signals
 
 Signals públicos devem declarar explicitamente seu payload para preservar
@@ -339,23 +426,20 @@ autocomplete e checagem estática.
 Signal sem argumentos:
 
 ```luau
-local Types = require(game.ReplicatedStorage.Shared.Modux.Types)
-
-RoundService.OnReady = RoundService.Signal.new() :: Types.Signal<>
+RoundService.OnReady = RoundService.Signal.new() :: Modux.Signal<>
 ```
 
 Signal com argumentos:
 
 ```luau
-RoundService.OnDamage = RoundService.Signal.new<<Player, number>>()
-```
-
-Também é possível usar cast:
-
-```luau
 RoundService.OnDamage =
-	RoundService.Signal.new() :: Types.Signal<Player, number>
+	RoundService.Signal.new() :: Modux.Signal<Player, number>
 ```
+
+O alias público fica no próprio módulo `Modux`, que já foi importado para criar
+o objeto. Não é necessário adicionar `require(Modux.Types)` ao arquivo.
+
+O cast legado com `Types.Signal<...>` continua aceito durante a migração.
 
 Uso:
 
@@ -367,7 +451,7 @@ end)
 RoundService.OnDamage:Fire(player, 25)
 ```
 
-Um Signal público criado sem pack ou cast continua funcionando, mas gera
+Um Signal público criado sem cast continua funcionando, mas gera
 `Signal<any>` com warning:
 
 ```luau
@@ -506,16 +590,16 @@ codecs publicados pela versão vendorizada atual.
 
 | Mensagem | Causa | Correção |
 | --- | --- | --- |
-| `Public Signal "X" has no explicit payload` | Signal público criado sem contrato | Use `Signal.new<<...>>()` ou cast para `Types.Signal<...>` |
-| `Signal "X" uses a parenthesized factory pack` | Sintaxe antiga como `new<<(Player, number)>>()` | Use `new<<Player, number>>()` |
+| `Public Signal "X" has no explicit payload` | Signal público criado sem contrato | Adicione cast para `Modux.Signal<...>` |
+| `Signal "X" uses a parenthesized factory pack` | Sintaxe antiga como `new<<(Player, number)>>()` | Migre para cast com `Modux.Signal<...>` |
 | `Lync codec "custom" is opaque` | Codec customizado sem tipo dedutível | Adicione `:: Codec<MyType>` ou `:: Packet<MyType>` |
 | `Lync codec "auto" is opaque` | `auto` não oferece contrato estático suficiente | Adicione cast explícito |
 | `Unknown Lync codec` | Codec novo ainda não registrado no tooling | Adicione cast e atualize o registry do tooling |
 | `Network packet "X" is missing profile key` | Template e packet não possuem as mesmas chaves | Sincronize o schema do perfil e o packet |
 | `Network packet "X" has extra profile key` | Packet possui uma chave não declarada no template | Remova a chave extra ou atualize o template |
 | `Duplicate Modux id` | Dois objetos usam o mesmo ID | Renomeie um dos objetos |
+| `GetComponent references unknown Component` | Um helper usa ID literal inexistente | Corrija o typo ou use um ID de `Modux.Component` |
 | `Cyclic Modux Import` | Dependências formam um ciclo | Reorganize responsabilidades para quebrar o ciclo |
 | `Cyclic mixin Extend` | Mixins estendem uns aos outros circularmente | Remova um dos `Extend` |
 | `scopeKey is deprecated` | Código legado usa segundo argumento de `Import` | Remova o `scopeKey` |
 | `Manifest.luau is missing` | Arquivos gerados não existem ou estão desatualizados | Execute `Modux: Generate Types` |
-

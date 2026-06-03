@@ -8,6 +8,9 @@ local Loader = require(script.src.Loader)
 
 export type Mode = "Singleton" | "Transient"
 export type Type = "Service" | "Controller" | "Component" | "Mixin"
+export type Signal<T...> = Types.Signal<T...>
+export type SignalConnection = Types.SignalConnection
+export type Promise<T> = Types.Promise<T>
 
 local TickRate = table.freeze({
 	Hz1 = 1,
