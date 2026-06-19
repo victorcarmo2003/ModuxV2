@@ -70,6 +70,9 @@ function Container.Resolve(_self: any, id: string, scopeKey: string?)
 			end
 		end
 		copy._cleanupTasks = {}
+		copy._localCharacterConnection = nil
+		copy._localCharacterRemovingConnection = nil
+		copy._localHumanoidConnection = nil
 		setmetatable(copy, getmetatable(template))
 		return copy
 	end
