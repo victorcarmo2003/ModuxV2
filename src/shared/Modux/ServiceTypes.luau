@@ -4,24 +4,10 @@
 
 local CoreTypes = require(script.Parent.CoreTypes)
 local ComponentTypes = require(script.Parent.ComponentTypes)
-<<<<<<< HEAD
 type DataKeyPayload = CoreTypes.DataKeyPayload
 type DataTemplate = CoreTypes.DataTemplate
 type DataTemplateKey = CoreTypes.DataTemplateKey
 type Executor<T> = CoreTypes.Executor<T>
-=======
-type AlienConfig = CoreTypes.AlienConfig
-type AlienStates = CoreTypes.AlienStates
-type AlienType = CoreTypes.AlienType
-type callbackZone = CoreTypes.callbackZone
-type DataKeyPayload = CoreTypes.DataKeyPayload
-type DataTemplate = CoreTypes.DataTemplate
-type DataTemplateKey = CoreTypes.DataTemplateKey
-type DayCycle = CoreTypes.DayCycle
-type Disconnect = CoreTypes.Disconnect
-type Executor<T> = CoreTypes.Executor<T>
-type FSM<State> = CoreTypes.FSM<State>
->>>>>>> 37c7764a17341055d4cf7c8c89bab5c17e6fb95f
 type GlobalClock = CoreTypes.GlobalClock
 type LyncConnection = CoreTypes.LyncConnection
 type LyncKeyedPacket<Payload, Key, Value> = CoreTypes.LyncKeyedPacket<Payload, Key, Value>
@@ -32,292 +18,29 @@ type Mode = CoreTypes.Mode
 type Network = CoreTypes.Network
 type NetworkTarget = CoreTypes.NetworkTarget
 type OnCancel = CoreTypes.OnCancel
-<<<<<<< HEAD
-=======
-type PlayerZoneConfig = CoreTypes.PlayerZoneConfig
->>>>>>> 37c7764a17341055d4cf7c8c89bab5c17e6fb95f
 type Promise<T> = CoreTypes.Promise<T>
 type PromiseAPI = CoreTypes.PromiseAPI
 type PromiseLike = CoreTypes.PromiseLike
 type PromiseStatus = CoreTypes.PromiseStatus
 type R6 = CoreTypes.R6
 type Reject = CoreTypes.Reject
-<<<<<<< HEAD
-=======
-type removeTypes = CoreTypes.removeTypes
->>>>>>> 37c7764a17341055d4cf7c8c89bab5c17e6fb95f
 type Resolve<T> = CoreTypes.Resolve<T>
 type Signal<T...> = CoreTypes.Signal<T...>
 type SignalAPI = CoreTypes.SignalAPI
 type SignalConnection = CoreTypes.SignalConnection
-<<<<<<< HEAD
 type TickRate = CoreTypes.TickRate
 type Tools = CoreTypes.Tools
 type Type = CoreTypes.Type
 type ComponentExtendFn = ComponentTypes.ComponentExtendFn
 type ComponentFn = ComponentTypes.ComponentFn
 type ComponentImportFn = ComponentTypes.ComponentImportFn
-=======
-type SpawnType = CoreTypes.SpawnType
-type State<T> = CoreTypes.State<T>
-type StateCallback<State> = CoreTypes.StateCallback<State>
-type TickRate = CoreTypes.TickRate
-type Tools = CoreTypes.Tools
-type TransitionCallback<State> = CoreTypes.TransitionCallback<State>
-type Transitions<State> = CoreTypes.Transitions<State>
-type Type = CoreTypes.Type
-type AlienBaseMixin = ComponentTypes.AlienBaseMixin
-type AreaMixin = ComponentTypes.AreaMixin
-type ComponentExtendFn = ComponentTypes.ComponentExtendFn
-type ComponentFn = ComponentTypes.ComponentFn
-type ComponentImportFn = ComponentTypes.ComponentImportFn
-type EnemyBaseComponent = ComponentTypes.EnemyBaseComponent
-type FieldAreaComponent = ComponentTypes.FieldAreaComponent
->>>>>>> 37c7764a17341055d4cf7c8c89bab5c17e6fb95f
 type GetAllComponentsFn = ComponentTypes.GetAllComponentsFn
 type GetComponentFn = ComponentTypes.GetComponentFn
 type GetRequiredComponentFn = ComponentTypes.GetRequiredComponentFn
 type ImportFn = ComponentTypes.ImportFn
 type MixinExtendFn = ComponentTypes.MixinExtendFn
 type MixinFn = ComponentTypes.MixinFn
-<<<<<<< HEAD
 --> SERVICES
-=======
-type PlayerZoneComponent = ComponentTypes.PlayerZoneComponent
-type RegionComponent = ComponentTypes.RegionComponent
-type SolarPanelComponent = ComponentTypes.SolarPanelComponent
-type VitalComponent = ComponentTypes.VitalComponent
-type ZoneComponent = ComponentTypes.ZoneComponent
-type DayCycleController = any
-type EnemyRenderController = any
-type NotificationController = any
-type ProfileController = any
-type ScreenController = any
-type UIAnimationsController = any
-type VitalController = any
---> SERVICES
-export type BattleService = {
-	ID: string,
-	Type: Type,
-	StartBattle: (self: BattleService) -> any,
-	Extend: (self: BattleService, id: "AlienBaseMixin" | "AreaMixin" | "PlayerZoneComponent") -> BattleService,
-	Import: ServiceImportFn,
-	OnInit: (self: BattleService, cb: (self: BattleService) -> ()) -> BattleService,
-	OnStart: (self: BattleService, cb: (self: BattleService) -> ()) -> BattleService,
-	OnTick: (self: BattleService, cb: (self: BattleService, deltaTime: number) -> (), rate: number, priority: number?) -> BattleService,
-	OnSimulation: (self: BattleService, cb: (self: BattleService, deltaTime: number) -> (), frequency: Enum.StepFrequency?, priority: number?) -> BattleService,
-	OnDestroy: (self: BattleService, cb: (self: BattleService) -> ()) -> BattleService,
-	Tag: (self: BattleService, tag: string) -> BattleService,
-	ClassName: (self: BattleService, className: string) -> BattleService,
-	AttributeDefaults: (self: BattleService, schema: { [string]: any }) -> BattleService,
-	Children: (self: BattleService, children: { string }) -> BattleService,
-	RequireComponent: (self: BattleService, id: string) -> BattleService,
-	New: (self: BattleService, ID: string, Type: Type) -> BattleService,
-	GetComponent: GetComponentFn,
-	GetRequiredComponent: GetRequiredComponentFn,
-	GetAllComponents: GetAllComponentsFn,
-	Cleanup: <T>(self: any, task: T) -> T,
-	Network: Network,
-	Promise: PromiseAPI,
-	GlobalClock: GlobalClock,
-	Signal: SignalAPI,
-	Tools: Tools,
-	Attributes: { [string]: any },
-}
-
-export type DayNightService = {
-	ID: string,
-	Type: Type,
-	StartTransition: (self: DayNightService, DayTime: "Night" | "Day") -> (),
-	ReplicateClock: (self: DayNightService) -> (),
-	ObserverCycle: (self: DayNightService, callback: (currentState: DayCycle) -> ()) -> any,
-	IncreaseDay: (self: DayNightService) -> (),
-	SetCycle: (self: DayNightService, cycle: DayCycle) -> (),
-	ToggleCycle: (self: DayNightService) -> (),
-	StartCycle: (self: DayNightService) -> (),
-	CurrentClock: number,
-	CurrentDay: number,
-	CurrentCycle: DayCycle,
-	OnCycleChanged: Signal<DayCycle, DayCycle>,
-	Extend: (self: DayNightService, id: "AlienBaseMixin" | "AreaMixin" | "PlayerZoneComponent") -> DayNightService,
-	Import: ServiceImportFn,
-	OnInit: (self: DayNightService, cb: (self: DayNightService) -> ()) -> DayNightService,
-	OnStart: (self: DayNightService, cb: (self: DayNightService) -> ()) -> DayNightService,
-	OnTick: (self: DayNightService, cb: (self: DayNightService, deltaTime: number) -> (), rate: number, priority: number?) -> DayNightService,
-	OnSimulation: (self: DayNightService, cb: (self: DayNightService, deltaTime: number) -> (), frequency: Enum.StepFrequency?, priority: number?) -> DayNightService,
-	OnDestroy: (self: DayNightService, cb: (self: DayNightService) -> ()) -> DayNightService,
-	Tag: (self: DayNightService, tag: string) -> DayNightService,
-	ClassName: (self: DayNightService, className: string) -> DayNightService,
-	AttributeDefaults: (self: DayNightService, schema: { [string]: any }) -> DayNightService,
-	Children: (self: DayNightService, children: { string }) -> DayNightService,
-	RequireComponent: (self: DayNightService, id: string) -> DayNightService,
-	New: (self: DayNightService, ID: string, Type: Type) -> DayNightService,
-	GetComponent: GetComponentFn,
-	GetRequiredComponent: GetRequiredComponentFn,
-	GetAllComponents: GetAllComponentsFn,
-	Cleanup: <T>(self: any, task: T) -> T,
-	Network: Network,
-	Promise: PromiseAPI,
-	GlobalClock: GlobalClock,
-	Signal: SignalAPI,
-	Tools: Tools,
-	Attributes: { [string]: any },
-}
-
-export type EnemyService = {
-	ID: string,
-	Type: Type,
-	RemoveAlienByKey: (self: EnemyService, Key: string, RemoveType: removeTypes) -> boolean,
-	GetAlienByKey: (self: EnemyService, Key: string) -> AlienConfig?,
-	GetRandomAlienPosition: (self: EnemyService, AreaInstance: BasePart) -> CFrame?,
-	GetRandomAlienType: (self: EnemyService, BaseType: SpawnType, Difficult: number) -> AlienType?,
-	CreateAlien: (self: EnemyService, BaseType: SpawnType, Difficult: number, SpawnCFrame: CFrame) -> string?,
-	Aliens: { [string]: AlienConfig },
-	Extend: (self: EnemyService, id: "AlienBaseMixin" | "AreaMixin" | "PlayerZoneComponent") -> EnemyService,
-	Import: ServiceImportFn,
-	OnInit: (self: EnemyService, cb: (self: EnemyService) -> ()) -> EnemyService,
-	OnStart: (self: EnemyService, cb: (self: EnemyService) -> ()) -> EnemyService,
-	OnTick: (self: EnemyService, cb: (self: EnemyService, deltaTime: number) -> (), rate: number, priority: number?) -> EnemyService,
-	OnSimulation: (self: EnemyService, cb: (self: EnemyService, deltaTime: number) -> (), frequency: Enum.StepFrequency?, priority: number?) -> EnemyService,
-	OnDestroy: (self: EnemyService, cb: (self: EnemyService) -> ()) -> EnemyService,
-	Tag: (self: EnemyService, tag: string) -> EnemyService,
-	ClassName: (self: EnemyService, className: string) -> EnemyService,
-	AttributeDefaults: (self: EnemyService, schema: { [string]: any }) -> EnemyService,
-	Children: (self: EnemyService, children: { string }) -> EnemyService,
-	RequireComponent: (self: EnemyService, id: string) -> EnemyService,
-	New: (self: EnemyService, ID: string, Type: Type) -> EnemyService,
-	GetComponent: GetComponentFn,
-	GetRequiredComponent: GetRequiredComponentFn,
-	GetAllComponents: GetAllComponentsFn,
-	Cleanup: <T>(self: any, task: T) -> T,
-	Network: Network,
-	Promise: PromiseAPI,
-	GlobalClock: GlobalClock,
-	Signal: SignalAPI,
-	Tools: Tools,
-	Attributes: { [string]: any },
-}
-
-export type GameService = {
-	ID: string,
-	Type: Type,
-	DayNightService: DayNightService,
-	CurrentState: GameStates,
-	OnBegin: Signal<>,
-	OnNormal: Signal<>,
-	OnDarkMoon: Signal<>,
-	State: FSM<GameStates>,
-	Extend: (self: GameService, id: "AlienBaseMixin" | "AreaMixin" | "PlayerZoneComponent") -> GameService,
-	Import: ServiceImportFn,
-	OnInit: (self: GameService, cb: (self: GameService) -> ()) -> GameService,
-	OnStart: (self: GameService, cb: (self: GameService) -> ()) -> GameService,
-	OnTick: (self: GameService, cb: (self: GameService, deltaTime: number) -> (), rate: number, priority: number?) -> GameService,
-	OnSimulation: (self: GameService, cb: (self: GameService, deltaTime: number) -> (), frequency: Enum.StepFrequency?, priority: number?) -> GameService,
-	OnDestroy: (self: GameService, cb: (self: GameService) -> ()) -> GameService,
-	Tag: (self: GameService, tag: string) -> GameService,
-	ClassName: (self: GameService, className: string) -> GameService,
-	AttributeDefaults: (self: GameService, schema: { [string]: any }) -> GameService,
-	Children: (self: GameService, children: { string }) -> GameService,
-	RequireComponent: (self: GameService, id: string) -> GameService,
-	New: (self: GameService, ID: string, Type: Type) -> GameService,
-	GetComponent: GetComponentFn,
-	GetRequiredComponent: GetRequiredComponentFn,
-	GetAllComponents: GetAllComponentsFn,
-	Cleanup: <T>(self: any, task: T) -> T,
-	Network: Network,
-	Promise: PromiseAPI,
-	GlobalClock: GlobalClock,
-	Signal: SignalAPI,
-	Tools: Tools,
-	Attributes: { [string]: any },
-}
-
-export type GeneratorService = {
-	ID: string,
-	Type: Type,
-	Extend: (self: GeneratorService, id: "AlienBaseMixin" | "AreaMixin" | "PlayerZoneComponent") -> GeneratorService,
-	Import: ServiceImportFn,
-	OnInit: (self: GeneratorService, cb: (self: GeneratorService) -> ()) -> GeneratorService,
-	OnStart: (self: GeneratorService, cb: (self: GeneratorService) -> ()) -> GeneratorService,
-	OnTick: (self: GeneratorService, cb: (self: GeneratorService, deltaTime: number) -> (), rate: number, priority: number?) -> GeneratorService,
-	OnSimulation: (self: GeneratorService, cb: (self: GeneratorService, deltaTime: number) -> (), frequency: Enum.StepFrequency?, priority: number?) -> GeneratorService,
-	OnDestroy: (self: GeneratorService, cb: (self: GeneratorService) -> ()) -> GeneratorService,
-	Tag: (self: GeneratorService, tag: string) -> GeneratorService,
-	ClassName: (self: GeneratorService, className: string) -> GeneratorService,
-	AttributeDefaults: (self: GeneratorService, schema: { [string]: any }) -> GeneratorService,
-	Children: (self: GeneratorService, children: { string }) -> GeneratorService,
-	RequireComponent: (self: GeneratorService, id: string) -> GeneratorService,
-	New: (self: GeneratorService, ID: string, Type: Type) -> GeneratorService,
-	GetComponent: GetComponentFn,
-	GetRequiredComponent: GetRequiredComponentFn,
-	GetAllComponents: GetAllComponentsFn,
-	Cleanup: <T>(self: any, task: T) -> T,
-	Network: Network,
-	Promise: PromiseAPI,
-	GlobalClock: GlobalClock,
-	Signal: SignalAPI,
-	Tools: Tools,
-	Attributes: { [string]: any },
-}
-
-export type LeaderstatsService = {
-	ID: string,
-	Type: Type,
-	Extend: (self: LeaderstatsService, id: "AlienBaseMixin" | "AreaMixin" | "PlayerZoneComponent") -> LeaderstatsService,
-	Import: ServiceImportFn,
-	OnInit: (self: LeaderstatsService, cb: (self: LeaderstatsService) -> ()) -> LeaderstatsService,
-	OnStart: (self: LeaderstatsService, cb: (self: LeaderstatsService) -> ()) -> LeaderstatsService,
-	OnTick: (self: LeaderstatsService, cb: (self: LeaderstatsService, deltaTime: number) -> (), rate: number, priority: number?) -> LeaderstatsService,
-	OnSimulation: (self: LeaderstatsService, cb: (self: LeaderstatsService, deltaTime: number) -> (), frequency: Enum.StepFrequency?, priority: number?) -> LeaderstatsService,
-	OnDestroy: (self: LeaderstatsService, cb: (self: LeaderstatsService) -> ()) -> LeaderstatsService,
-	Tag: (self: LeaderstatsService, tag: string) -> LeaderstatsService,
-	ClassName: (self: LeaderstatsService, className: string) -> LeaderstatsService,
-	AttributeDefaults: (self: LeaderstatsService, schema: { [string]: any }) -> LeaderstatsService,
-	Children: (self: LeaderstatsService, children: { string }) -> LeaderstatsService,
-	RequireComponent: (self: LeaderstatsService, id: string) -> LeaderstatsService,
-	New: (self: LeaderstatsService, ID: string, Type: Type) -> LeaderstatsService,
-	GetComponent: GetComponentFn,
-	GetRequiredComponent: GetRequiredComponentFn,
-	GetAllComponents: GetAllComponentsFn,
-	Cleanup: <T>(self: any, task: T) -> T,
-	Network: Network,
-	Promise: PromiseAPI,
-	GlobalClock: GlobalClock,
-	Signal: SignalAPI,
-	Tools: Tools,
-	Attributes: { [string]: any },
-}
-
-export type PlayerBilboardService = {
-	ID: string,
-	Type: Type,
-	PlayerService: PlayerService,
-	Extend: (self: PlayerBilboardService, id: "AlienBaseMixin" | "AreaMixin" | "PlayerZoneComponent") -> PlayerBilboardService,
-	Import: ServiceImportFn,
-	OnInit: (self: PlayerBilboardService, cb: (self: PlayerBilboardService) -> ()) -> PlayerBilboardService,
-	OnStart: (self: PlayerBilboardService, cb: (self: PlayerBilboardService) -> ()) -> PlayerBilboardService,
-	OnTick: (self: PlayerBilboardService, cb: (self: PlayerBilboardService, deltaTime: number) -> (), rate: number, priority: number?) -> PlayerBilboardService,
-	OnSimulation: (self: PlayerBilboardService, cb: (self: PlayerBilboardService, deltaTime: number) -> (), frequency: Enum.StepFrequency?, priority: number?) -> PlayerBilboardService,
-	OnDestroy: (self: PlayerBilboardService, cb: (self: PlayerBilboardService) -> ()) -> PlayerBilboardService,
-	Tag: (self: PlayerBilboardService, tag: string) -> PlayerBilboardService,
-	ClassName: (self: PlayerBilboardService, className: string) -> PlayerBilboardService,
-	AttributeDefaults: (self: PlayerBilboardService, schema: { [string]: any }) -> PlayerBilboardService,
-	Children: (self: PlayerBilboardService, children: { string }) -> PlayerBilboardService,
-	RequireComponent: (self: PlayerBilboardService, id: string) -> PlayerBilboardService,
-	New: (self: PlayerBilboardService, ID: string, Type: Type) -> PlayerBilboardService,
-	GetComponent: GetComponentFn,
-	GetRequiredComponent: GetRequiredComponentFn,
-	GetAllComponents: GetAllComponentsFn,
-	Cleanup: <T>(self: any, task: T) -> T,
-	Network: Network,
-	Promise: PromiseAPI,
-	GlobalClock: GlobalClock,
-	Signal: SignalAPI,
-	Tools: Tools,
-	Attributes: { [string]: any },
-}
-
->>>>>>> 37c7764a17341055d4cf7c8c89bab5c17e6fb95f
 export type PlayerService = {
 	ID: string,
 	Type: Type,
@@ -325,15 +48,7 @@ export type PlayerService = {
 	OnPlayerRemoved: (self: PlayerService, callback: (Player: Player) -> ()) -> (),
 	OnCharacterAdded: (self: PlayerService, callback: (Character: R6, Player: Player) -> ()) -> (),
 	OnCharacterRemoved: (self: PlayerService, callback: (Character: R6, Player: Player) -> ()) -> (),
-<<<<<<< HEAD
 	Extend: (self: PlayerService, id: string) -> PlayerService,
-=======
-	GetAllPlayers: (self: PlayerService) -> { Player },
-	GetAllCharacters: (self: PlayerService) -> { R6 },
-	allPlayers: { [number]: Player },
-	allCharacters: { [number]: R6 },
-	Extend: (self: PlayerService, id: "AlienBaseMixin" | "AreaMixin" | "PlayerZoneComponent") -> PlayerService,
->>>>>>> 37c7764a17341055d4cf7c8c89bab5c17e6fb95f
 	Import: ServiceImportFn,
 	OnInit: (self: PlayerService, cb: (self: PlayerService) -> ()) -> PlayerService,
 	OnStart: (self: PlayerService, cb: (self: PlayerService) -> ()) -> PlayerService,
@@ -361,31 +76,19 @@ export type PlayerService = {
 export type ProfileService = {
 	ID: string,
 	Type: Type,
-<<<<<<< HEAD
 	OnPlayerAdded: (self: ProfileService, callback: (Player: Player) -> ()) -> (),
 	OnPlayerRemoved: (self: ProfileService, callback: (Player: Player) -> ()) -> (),
 	OnCharacterAdded: (self: ProfileService, callback: (Character: R6, Player: Player) -> ()) -> (),
 	OnCharacterRemoved: (self: ProfileService, callback: (Character: R6, Player: Player) -> ()) -> (),
-=======
-	PlayerService: PlayerService,
->>>>>>> 37c7764a17341055d4cf7c8c89bab5c17e6fb95f
 	Set: (self: ProfileService, Player: Player, Key: DataTemplateKey, value: any) -> any,
 	ReplicateKey: (self: ProfileService, Player: Player, Key: DataTemplateKey) -> (),
 	Replicate: (self: ProfileService, Player: Player) -> any,
 	GetData: (self: ProfileService, Player: Player) -> DataTemplate?,
-<<<<<<< HEAD
 	PrintData: FileSyncReplicationService,
 	Profiles: { [Player]: any },
 	OnUpdateData: Signal<any>,
 	OnUpdateKey: Signal<any>,
 	Extend: (self: ProfileService, id: string) -> ProfileService,
-=======
-	PrintData: boolean,
-	Profiles: { [Player]: any },
-	OnUpdateData: Signal<Player, DataTemplate>,
-	OnUpdateKey: Signal<Player, DataTemplateKey, any>,
-	Extend: (self: ProfileService, id: "AlienBaseMixin" | "AreaMixin" | "PlayerZoneComponent") -> ProfileService,
->>>>>>> 37c7764a17341055d4cf7c8c89bab5c17e6fb95f
 	Import: ServiceImportFn,
 	OnInit: (self: ProfileService, cb: (self: ProfileService) -> ()) -> ProfileService,
 	OnStart: (self: ProfileService, cb: (self: ProfileService) -> ()) -> ProfileService,
@@ -409,7 +112,6 @@ export type ProfileService = {
 	Tools: Tools,
 	Attributes: { [string]: any },
 }
-<<<<<<< HEAD
 --> IMPORT FUNCTIONS
 
 export type ServiceImportFn =
@@ -419,148 +121,12 @@ export type ServiceImportFn =
 --> EXTEND FUNCTIONS
 
 export type ServiceExtendFn = <Self>(self: Self, id: string) -> Self
-=======
-
-export type SpawnnersService = {
-	ID: string,
-	Type: Type,
-	GetRegistredsArea: (self: SpawnnersService) -> { AreaRegistredType },
-	HasArea: (self: SpawnnersService, instance: BasePart) -> any,
-	ResumeArea: (self: SpawnnersService, Instance: BasePart) -> boolean,
-	PausaArea: (self: SpawnnersService, Area: BasePart | string) -> boolean,
-	RegisterArea: (self: SpawnnersService, Instance: BasePart, difficulty: number, AreaType: SpawnType) -> boolean,
-	UnregisterArea: ((self: SpawnnersService) -> boolean) & ((self: SpawnnersService, Area: Instance | BasePart?) -> boolean) & ((self: SpawnnersService, Area: Instance | BasePart?, All: boolean?) -> boolean),
-	AreasRegistred: AreaRegistredType,
-	Extend: (self: SpawnnersService, id: "AlienBaseMixin" | "AreaMixin" | "PlayerZoneComponent") -> SpawnnersService,
-	Import: ServiceImportFn,
-	OnInit: (self: SpawnnersService, cb: (self: SpawnnersService) -> ()) -> SpawnnersService,
-	OnStart: (self: SpawnnersService, cb: (self: SpawnnersService) -> ()) -> SpawnnersService,
-	OnTick: (self: SpawnnersService, cb: (self: SpawnnersService, deltaTime: number) -> (), rate: number, priority: number?) -> SpawnnersService,
-	OnSimulation: (self: SpawnnersService, cb: (self: SpawnnersService, deltaTime: number) -> (), frequency: Enum.StepFrequency?, priority: number?) -> SpawnnersService,
-	OnDestroy: (self: SpawnnersService, cb: (self: SpawnnersService) -> ()) -> SpawnnersService,
-	Tag: (self: SpawnnersService, tag: string) -> SpawnnersService,
-	ClassName: (self: SpawnnersService, className: string) -> SpawnnersService,
-	AttributeDefaults: (self: SpawnnersService, schema: { [string]: any }) -> SpawnnersService,
-	Children: (self: SpawnnersService, children: { string }) -> SpawnnersService,
-	RequireComponent: (self: SpawnnersService, id: string) -> SpawnnersService,
-	New: (self: SpawnnersService, ID: string, Type: Type) -> SpawnnersService,
-	GetComponent: GetComponentFn,
-	GetRequiredComponent: GetRequiredComponentFn,
-	GetAllComponents: GetAllComponentsFn,
-	Cleanup: <T>(self: any, task: T) -> T,
-	Network: Network,
-	Promise: PromiseAPI,
-	GlobalClock: GlobalClock,
-	Signal: SignalAPI,
-	Tools: Tools,
-	Attributes: { [string]: any },
-}
-
-export type VitalService = {
-	ID: string,
-	Type: Type,
-	PlayerService: PlayerService,
-	Extend: (self: VitalService, id: "AlienBaseMixin" | "AreaMixin" | "PlayerZoneComponent") -> VitalService,
-	Import: ServiceImportFn,
-	OnInit: (self: VitalService, cb: (self: VitalService) -> ()) -> VitalService,
-	OnStart: (self: VitalService, cb: (self: VitalService) -> ()) -> VitalService,
-	OnTick: (self: VitalService, cb: (self: VitalService, deltaTime: number) -> (), rate: number, priority: number?) -> VitalService,
-	OnSimulation: (self: VitalService, cb: (self: VitalService, deltaTime: number) -> (), frequency: Enum.StepFrequency?, priority: number?) -> VitalService,
-	OnDestroy: (self: VitalService, cb: (self: VitalService) -> ()) -> VitalService,
-	Tag: (self: VitalService, tag: string) -> VitalService,
-	ClassName: (self: VitalService, className: string) -> VitalService,
-	AttributeDefaults: (self: VitalService, schema: { [string]: any }) -> VitalService,
-	Children: (self: VitalService, children: { string }) -> VitalService,
-	RequireComponent: (self: VitalService, id: string) -> VitalService,
-	New: (self: VitalService, ID: string, Type: Type) -> VitalService,
-	GetComponent: GetComponentFn,
-	GetRequiredComponent: GetRequiredComponentFn,
-	GetAllComponents: GetAllComponentsFn,
-	Cleanup: <T>(self: any, task: T) -> T,
-	Network: Network,
-	Promise: PromiseAPI,
-	GlobalClock: GlobalClock,
-	Signal: SignalAPI,
-	Tools: Tools,
-	Attributes: { [string]: any },
-}
-
-export type ZoneService = {
-	ID: string,
-	Type: Type,
-	ProfileService: ProfileService,
-	ChangePlayerZone: (self: ZoneService, Player: Player, Zone: any) -> (),
-	ChangePlayerSafeZone: (self: ZoneService, Player: Player, Zone: any) -> (),
-	zonePlayers: { [Player]: string },
-	safezonePlayers: { [Player]: string },
-	Extend: (self: ZoneService, id: "AlienBaseMixin" | "AreaMixin" | "PlayerZoneComponent") -> ZoneService,
-	Import: ServiceImportFn,
-	OnInit: (self: ZoneService, cb: (self: ZoneService) -> ()) -> ZoneService,
-	OnStart: (self: ZoneService, cb: (self: ZoneService) -> ()) -> ZoneService,
-	OnTick: (self: ZoneService, cb: (self: ZoneService, deltaTime: number) -> (), rate: number, priority: number?) -> ZoneService,
-	OnSimulation: (self: ZoneService, cb: (self: ZoneService, deltaTime: number) -> (), frequency: Enum.StepFrequency?, priority: number?) -> ZoneService,
-	OnDestroy: (self: ZoneService, cb: (self: ZoneService) -> ()) -> ZoneService,
-	Tag: (self: ZoneService, tag: string) -> ZoneService,
-	ClassName: (self: ZoneService, className: string) -> ZoneService,
-	AttributeDefaults: (self: ZoneService, schema: { [string]: any }) -> ZoneService,
-	Children: (self: ZoneService, children: { string }) -> ZoneService,
-	RequireComponent: (self: ZoneService, id: string) -> ZoneService,
-	New: (self: ZoneService, ID: string, Type: Type) -> ZoneService,
-	GetComponent: GetComponentFn,
-	GetRequiredComponent: GetRequiredComponentFn,
-	GetAllComponents: GetAllComponentsFn,
-	Cleanup: <T>(self: any, task: T) -> T,
-	Network: Network,
-	Promise: PromiseAPI,
-	GlobalClock: GlobalClock,
-	Signal: SignalAPI,
-	Tools: Tools,
-	Attributes: { [string]: any },
-}
---> IMPORT FUNCTIONS
-
-export type ServiceImportFn =
-	(<Self>(self: Self, id: "BattleService", scopeKey: string?) -> Self) &
-	(<Self>(self: Self, id: "DayNightService", scopeKey: string?) -> Self) &
-	(<Self>(self: Self, id: "EnemyService", scopeKey: string?) -> Self) &
-	(<Self>(self: Self, id: "GameService", scopeKey: string?) -> Self) &
-	(<Self>(self: Self, id: "GeneratorService", scopeKey: string?) -> Self) &
-	(<Self>(self: Self, id: "LeaderstatsService", scopeKey: string?) -> Self) &
-	(<Self>(self: Self, id: "PlayerBilboardService", scopeKey: string?) -> Self) &
-	(<Self>(self: Self, id: "PlayerService", scopeKey: string?) -> Self) &
-	(<Self>(self: Self, id: "ProfileService", scopeKey: string?) -> Self) &
-	(<Self>(self: Self, id: "SpawnnersService", scopeKey: string?) -> Self) &
-	(<Self>(self: Self, id: "VitalService", scopeKey: string?) -> Self) &
-	(<Self>(self: Self, id: "ZoneService", scopeKey: string?) -> Self)
-
---> EXTEND FUNCTIONS
-
-export type ServiceExtendFn =
-	(<Self>(self: Self, id: "AlienBaseMixin") -> Self) &
-	(<Self>(self: Self, id: "AreaMixin") -> Self) &
-	(<Self>(self: Self, id: "PlayerZoneComponent") -> Self)
->>>>>>> 37c7764a17341055d4cf7c8c89bab5c17e6fb95f
 
 --> MODUX OVERLOADS
 
 export type ServiceFn =
-<<<<<<< HEAD
 	((id: "PlayerService", mode: Mode?) -> PlayerService) &
 	((id: "ProfileService", mode: Mode?) -> ProfileService)
-=======
-	((id: "BattleService", mode: Mode?) -> BattleService) &
-	((id: "DayNightService", mode: Mode?) -> DayNightService) &
-	((id: "EnemyService", mode: Mode?) -> EnemyService) &
-	((id: "GameService", mode: Mode?) -> GameService) &
-	((id: "GeneratorService", mode: Mode?) -> GeneratorService) &
-	((id: "LeaderstatsService", mode: Mode?) -> LeaderstatsService) &
-	((id: "PlayerBilboardService", mode: Mode?) -> PlayerBilboardService) &
-	((id: "PlayerService", mode: Mode?) -> PlayerService) &
-	((id: "ProfileService", mode: Mode?) -> ProfileService) &
-	((id: "SpawnnersService", mode: Mode?) -> SpawnnersService) &
-	((id: "VitalService", mode: Mode?) -> VitalService) &
-	((id: "ZoneService", mode: Mode?) -> ZoneService)
->>>>>>> 37c7764a17341055d4cf7c8c89bab5c17e6fb95f
 
 -- END AUTO-GENERATED
 

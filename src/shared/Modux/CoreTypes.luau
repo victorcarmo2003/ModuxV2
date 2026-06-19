@@ -8,174 +8,19 @@ export type Type = "Service" | "Controller" | "Component" | "Mixin"
 export type TickRate = number
 --> REACHABLE PROJECT TYPES (generated statically)
 export type DataTemplate = {
-<<<<<<< HEAD
 	Cash: number,
-=======
-	Gems: number,
-	Gamepasses: { [string]: boolean },
-	Item: { [string]: number },
-	UnlockedItems: { [number]: boolean },
-	UnlockedClasses: { [number]: boolean },
-	Badgets: { [number]: boolean },
-	FirstLogin: boolean,
-	Wins: number,
-	DayCount: number,
-	CurrentZone: string,
-	CurrentClass: string,
-	TimeSpent: number,
-	RobuxSpent: number,
-	GemsSpent: number,
-	ChestOpen: number,
-	SpinWheel: number,
->>>>>>> 37c7764a17341055d4cf7c8c89bab5c17e6fb95f
 	MusicVolume: number,
 	SoundVolume: number,
 	MusicEnabled: boolean,
 	SoundEnabled: boolean,
 }
-<<<<<<< HEAD
 export type DataTemplateKey = "Cash" | "MusicVolume" | "SoundVolume" | "MusicEnabled" | "SoundEnabled"
 export type DataKeyPayload =
 	{ key: "Cash", value: number }
-=======
-export type DataTemplateKey = "Gems" | "Gamepasses" | "Item" | "UnlockedItems" | "UnlockedClasses" | "Badgets" | "FirstLogin" | "Wins" | "DayCount" | "CurrentZone" | "CurrentClass" | "TimeSpent" | "RobuxSpent" | "GemsSpent" | "ChestOpen" | "SpinWheel" | "MusicVolume" | "SoundVolume" | "MusicEnabled" | "SoundEnabled"
-export type DataKeyPayload =
-	{ key: "Gems", value: number }
-	| { key: "Gamepasses", value: { [string]: boolean } }
-	| { key: "Item", value: { [string]: number } }
-	| { key: "UnlockedItems", value: { [number]: boolean } }
-	| { key: "UnlockedClasses", value: { [number]: boolean } }
-	| { key: "Badgets", value: { [number]: boolean } }
-	| { key: "FirstLogin", value: boolean }
-	| { key: "Wins", value: number }
-	| { key: "DayCount", value: number }
-	| { key: "CurrentZone", value: string }
-	| { key: "CurrentClass", value: string }
-	| { key: "TimeSpent", value: number }
-	| { key: "RobuxSpent", value: number }
-	| { key: "GemsSpent", value: number }
-	| { key: "ChestOpen", value: number }
-	| { key: "SpinWheel", value: number }
->>>>>>> 37c7764a17341055d4cf7c8c89bab5c17e6fb95f
 	| { key: "MusicVolume", value: number }
 	| { key: "SoundVolume", value: number }
 	| { key: "MusicEnabled", value: boolean }
 	| { key: "SoundEnabled", value: boolean }
-<<<<<<< HEAD
-=======
-type MainGui = ScreenGuiRoot
-type WindowId = UIWindowId
-type AnimationHandle<T> = {
-	Completed: RBXScriptSignal,
-	IsPlaying: (self: AnimationHandle<T>) -> boolean,
-	Get: (self: AnimationHandle<T>) -> (T, T),
-	GetCurrentPos: (self: AnimationHandle<T>) -> T,
-	Set: (self: AnimationHandle<T>, value: T) -> AnimationHandle<T>,
-	SetTarget: (self: AnimationHandle<T>, nextTarget: T) -> AnimationHandle<T>,
-	SetConfig: (self: AnimationHandle<T>, nextDamping: number?, nextFrequency: number?) -> AnimationHandle<T>,
-	Play: (self: AnimationHandle<T>, nextTarget: T?, nextFrom: T?) -> AnimationHandle<T>,
-	Stop: (self: AnimationHandle<T>, finish: boolean?) -> AnimationHandle<T>,
-	Reset: (self: AnimationHandle<T>) -> AnimationHandle<T>,
-	Destroy: (self: AnimationHandle<T>) -> AnimationHandle<T>,
-}
-type SpringOptions = {
-	TargetInstance: Instance?,
-	From: any?,
-	To: any?,
-	Damping: number?,
-	Frequency: number?,
-	Epsilon: number?,
-	Clock: ("RenderStepped" | "Heartbeat")?,
-	Step: ((value: any, alpha: number, animation: any) -> ())?,
-	Done: (() -> ())?,
-	Reset: (() -> ())?,
-}
-type GroupAnimationHandle = {
-	Completed: RBXScriptSignal,
-	Play: (self: GroupAnimationHandle) -> GroupAnimationHandle,
-	Stop: (self: GroupAnimationHandle, finish: boolean?) -> GroupAnimationHandle,
-	Reset: (self: GroupAnimationHandle) -> GroupAnimationHandle,
-	GetCurrentPos: (self: GroupAnimationHandle) -> { any },
-	Destroy: (self: GroupAnimationHandle) -> GroupAnimationHandle,
-}
-type SequenceAnimationHandle = {
-	Completed: RBXScriptSignal,
-	Play: (self: SequenceAnimationHandle) -> SequenceAnimationHandle,
-	Next: (self: SequenceAnimationHandle) -> SequenceAnimationHandle,
-	Stop: (self: SequenceAnimationHandle, finish: boolean?) -> SequenceAnimationHandle,
-	Reset: (self: SequenceAnimationHandle) -> SequenceAnimationHandle,
-	GetCurrentPos: (self: SequenceAnimationHandle) -> any,
-	Destroy: (self: SequenceAnimationHandle) -> SequenceAnimationHandle,
-}
-type EnemyConfig = {
-	BaseHealth: number,
-	BaseDamage: number,
-	WalkSpeed: number,
-}
-type AlienVisibleStatus = "Show" | "Hiden"
-export type State<T> = PubTypes.Value<T> & {
-	_value: T
-}
-export type StateCallback<State> = (state: State, otherState: State) -> ()
-export type Disconnect = () -> ()
-export type TransitionCallback<State> = (previousState: State, nextState: State) -> ()
-export type Transitions<State> = { [State]: { State } }
-export type FSM<State> = {
-	State: State,
-
-	GetState: (self: FSM<State>) -> State,
-	Is: (self: FSM<State>, state: State) -> boolean,
-	CanTransition: (self: FSM<State>, nextState: State) -> boolean,
-	Transition: (self: FSM<State>, nextState: State) -> boolean,
-	OnEnter: (self: FSM<State>, state: State, callback: StateCallback<State>) -> Disconnect,
-	OnLeave: (self: FSM<State>, state: State, callback: StateCallback<State>) -> Disconnect,
-	OnTransition: (self: FSM<State>, callback: TransitionCallback<State>) -> Disconnect,
-	Destroy: (self: FSM<State>) -> (),
-
-	_transitions: Transitions<State>?,
-	_enterListeners: { [State]: { StateCallback<State> } },
-	_leaveListeners: { [State]: { StateCallback<State> } },
-	_transitionListeners: { TransitionCallback<State> },
-	_destroyed: boolean,
-}
-export type DayCycle = "Day" | "Night" | "Idle"
-export type removeTypes = "Visible" | "Destroy"
-export type AlienType = "Common"
-	| "Intermediate"
-	| "Runner"
-	| "Rage"
-	| "Telekinesis"
-	| "Screamer"
-	| "Shooter"
-	| "Knifer"
-	| "Sniper"
-	| "Tanker"
-	| "Brutus"
-export type AlienStates = "Idle" | "Walk" | "Running" | "Jumping" | "Attacking" | "Attacked"
-export type AlienConfig = {
-	Key: string,
-	AlienType: AlienType,
-
-	CFrame: CFrame,
-	Velocity: Vector3,
-
-	Health: number,
-	MaxHealth: number,
-	Damage: number,
-	WalkSpeed: number,
-
-	State: FSM<AlienStates>,
-	Alived: boolean,
-	Visible: boolean,
-
-	TargetPlayer: Player?,
-	TargetPosition: Vector3?,
-
-	Cooldowns: {[string]: number}
-}
-export type SpawnType = "Base" | "Field" | "EnemyBase"
-type GameStates = "Begin" | "Normal" | "DarkMoon"
->>>>>>> 37c7764a17341055d4cf7c8c89bab5c17e6fb95f
 export type R6 = {
 	Head: {
 		Mesh: SpecialMesh,
@@ -266,24 +111,6 @@ export type R6 = {
 	} & LocalScript,
 	Body_Colors: BodyColors,
 } & Model
-<<<<<<< HEAD
-=======
-type AreaState = "Active" | "Unactive"
-type AreaRegistredType = {
-	ID: number,
-	Instance: BasePart,
-	AreaType: SpawnType,
-	CurrentDifficult: number,
-	DifficultMode: "EASY" | "MEDIUM" | "HARD",
-	State: FSM<AreaState>,
-}
-export type PlayerZoneConfig = {
-	MinHeight: number,
-	Padding: Vector3?,
-	Shape: "Block" | "Ball" | "Cylinder" | "Wedge" | "CornerWedge",
-}
-export type callbackZone = (Player: Player, Zone: PlayerZoneConfig) -> ()
->>>>>>> 37c7764a17341055d4cf7c8c89bab5c17e6fb95f
 --> LYNC BASE TYPES
 export type LyncConnection = { connected: boolean, disconnect: (self: LyncConnection) -> () }
 export type LyncPacketStats = { bytesSent: number, bytesReceived: number, fires: number, recvFires: number, drops: number }

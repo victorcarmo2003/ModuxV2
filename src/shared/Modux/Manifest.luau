@@ -3,46 +3,11 @@
 
 return {
 	Shared = {
-<<<<<<< HEAD
 	},
 	Server = {
 		"Services.PlayerService",
 		"Services.ProfileService",
 	},
 	Client = {
-=======
-		"Components.PlayerZoneComponent",
-		"Components.RegionComponent",
-		"Components.SolarPanelComponent",
-	},
-	Server = {
-		"Components.Aliens.AlienMixin",
-		"Components.Areas.AreaMixin",
-		"Components.Areas.EnemyBaseComponent",
-		"Components.Areas.FieldAreaComponent",
-		"Components.VitalComponent",
-		"Components.ZoneComponent",
-		"Services.BattleService",
-		"Services.DayNightService",
-		"Services.EnemyService",
-		"Services.GameService",
-		"Services.GeneratorService",
-		"Services.LeaderstatsService",
-		"Services.PlayerBillboardService",
-		"Services.PlayerService",
-		"Services.ProfileService",
-		"Services.SpawnnersService",
-		"Services.VitalService",
-		"Services.ZoneService",
-	},
-	Client = {
-		"Controllers.DayCycleController",
-		"Controllers.EnemyRenderController",
-		"Controllers.NotificationController",
-		"Controllers.ProfileController",
-		"Controllers.ScreenController",
-		"Controllers.UIAnimationsController",
-		"Controllers.VitalController",
->>>>>>> 37c7764a17341055d4cf7c8c89bab5c17e6fb95f
 	},
 }
