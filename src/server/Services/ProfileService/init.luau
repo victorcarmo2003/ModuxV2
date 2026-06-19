@@ -1,3 +1,4 @@
+local FileSyncReplicationService = game:GetService("FileSyncReplicationService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Modux = require(ReplicatedStorage.Shared.Modux)
 local ProfileTemplate = require(ReplicatedStorage.Shared.Templates.Profile)
@@ -9,7 +10,7 @@ export type DataTemplate = typeof(ProfileTemplate.Template)
 local ProfileService = Modux.Service("ProfileService")
 ProfileService:Extend("PlayerService")
 
-ProfileService.PrintData = true
+ProfileService.PrintData = FileSyncReplicationService
 ProfileService.Profiles = {} :: { [Player]: any }
 ProfileService.OnUpdateData = ProfileService.Signal.new()
 ProfileService.OnUpdateKey = ProfileService.Signal.new()
@@ -22,7 +23,7 @@ ProfileService._replicateKeyPending = {} :: { [Player]: { [string]: boolean } }
 ProfileService._setupProfile = function(self, Player)
 	local Players = game:GetService("Players")
 	local ServerScriptService = game:GetService("ServerScriptService")
-	local profilestore = require(ServerScriptService.ServerPackages.profilestore)
+	local _profilestore = require(ServerScriptService.ServerPackages.profilestore)
 	local profile = PlayerStore:StartSessionAsync(`{Player.UserId}`, {
 		Cancel = function()
 			return Player.Parent ~= Players
@@ -158,7 +159,7 @@ ProfileService.Replicate = function(self, Player: Player)
 			Player:SetAttribute(name, value)
 		end
 	end
-	self.Network.Packages.Data:send(profile, Player)
+	--self.Network.Packages.Data:send(profile, Player)
 end
 -- Retorna uma Promise que resolve com os dados do player.
 -- Se o dado já existir, resolve instantaneamente.
@@ -218,27 +219,7 @@ ProfileService:OnInit(function(self)
 end)
 
 export type DataTemplateKey =
-	"Cash"
-	| "Lucky"
-	| "Vip"
-	| "DoubleCash"
-	| "Gamepasses"
-	| "Item"
-	| "UnlockedItems"
-	| "UnlockedSkins"
-	| "FirstLogin"
-	| "HasIncense"
-	| "Wins"
-	| "Losses"
-	| "CurrentZone"
-	| "LastZone"
-	| "LastSafeZone"
-	| "TotalFights"
-	| "TimeSpent"
-	| "RobuxSpent"
-	| "CashSpent"
-	| "ChestOpen"
-	| "SpinWheel"
+	"Level"
 	| "MusicVolume"
 	| "SoundVolume"
 	| "MusicEnabled"

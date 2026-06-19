@@ -8,6 +8,12 @@ local ComponentTypes = require(script.Parent.ComponentTypes)
 local ControllerTypes = require(script.Parent.ControllerTypes)
 local ServiceTypes = require(script.Parent.ServiceTypes)
 --> COMPATIBILITY TYPE EXPORTS
+<<<<<<< HEAD
+export type DataKeyPayload = CoreTypes.DataKeyPayload
+export type DataTemplate = CoreTypes.DataTemplate
+export type DataTemplateKey = CoreTypes.DataTemplateKey
+export type Executor<T> = CoreTypes.Executor<T>
+=======
 export type AlienConfig = CoreTypes.AlienConfig
 export type AlienStates = CoreTypes.AlienStates
 export type AlienType = CoreTypes.AlienType
@@ -19,6 +25,7 @@ export type DayCycle = CoreTypes.DayCycle
 export type Disconnect = CoreTypes.Disconnect
 export type Executor<T> = CoreTypes.Executor<T>
 export type FSM<State> = CoreTypes.FSM<State>
+>>>>>>> 37c7764a17341055d4cf7c8c89bab5c17e6fb95f
 export type GlobalClock = CoreTypes.GlobalClock
 export type LyncConnection = CoreTypes.LyncConnection
 export type LyncKeyedPacket<Payload, Key, Value> = CoreTypes.LyncKeyedPacket<Payload, Key, Value>
@@ -29,18 +36,35 @@ export type Mode = CoreTypes.Mode
 export type Network = CoreTypes.Network
 export type NetworkTarget = CoreTypes.NetworkTarget
 export type OnCancel = CoreTypes.OnCancel
+<<<<<<< HEAD
+=======
 export type PlayerZoneConfig = CoreTypes.PlayerZoneConfig
+>>>>>>> 37c7764a17341055d4cf7c8c89bab5c17e6fb95f
 export type Promise<T> = CoreTypes.Promise<T>
 export type PromiseAPI = CoreTypes.PromiseAPI
 export type PromiseLike = CoreTypes.PromiseLike
 export type PromiseStatus = CoreTypes.PromiseStatus
 export type R6 = CoreTypes.R6
 export type Reject = CoreTypes.Reject
+<<<<<<< HEAD
+=======
 export type removeTypes = CoreTypes.removeTypes
+>>>>>>> 37c7764a17341055d4cf7c8c89bab5c17e6fb95f
 export type Resolve<T> = CoreTypes.Resolve<T>
 export type Signal<T...> = CoreTypes.Signal<T...>
 export type SignalAPI = CoreTypes.SignalAPI
 export type SignalConnection = CoreTypes.SignalConnection
+<<<<<<< HEAD
+export type TickRate = CoreTypes.TickRate
+export type Tools = CoreTypes.Tools
+export type Type = CoreTypes.Type
+export type ScreenGuiRoot = InstanceTypes.ScreenGuiRoot
+export type StarterGuiTypes = InstanceTypes.StarterGuiTypes
+export type UIWindowId = InstanceTypes.UIWindowId
+export type ComponentExtendFn = ComponentTypes.ComponentExtendFn
+export type ComponentFn = ComponentTypes.ComponentFn
+export type ComponentImportFn = ComponentTypes.ComponentImportFn
+=======
 export type SpawnType = CoreTypes.SpawnType
 export type State<T> = CoreTypes.State<T>
 export type StateCallback<State> = CoreTypes.StateCallback<State>
@@ -65,12 +89,18 @@ export type ComponentFn = ComponentTypes.ComponentFn
 export type ComponentImportFn = ComponentTypes.ComponentImportFn
 export type EnemyBaseComponent = ComponentTypes.EnemyBaseComponent
 export type FieldAreaComponent = ComponentTypes.FieldAreaComponent
+>>>>>>> 37c7764a17341055d4cf7c8c89bab5c17e6fb95f
 export type GetAllComponentsFn = ComponentTypes.GetAllComponentsFn
 export type GetComponentFn = ComponentTypes.GetComponentFn
 export type GetRequiredComponentFn = ComponentTypes.GetRequiredComponentFn
 export type ImportFn = ComponentTypes.ImportFn
 export type MixinExtendFn = ComponentTypes.MixinExtendFn
 export type MixinFn = ComponentTypes.MixinFn
+<<<<<<< HEAD
+export type ControllerExtendFn = ControllerTypes.ControllerExtendFn
+export type ControllerFn = ControllerTypes.ControllerFn
+export type ControllerImportFn = ControllerTypes.ControllerImportFn
+=======
 export type PlayerZoneComponent = ComponentTypes.PlayerZoneComponent
 export type RegionComponent = ComponentTypes.RegionComponent
 export type SolarPanelComponent = ComponentTypes.SolarPanelComponent
@@ -93,14 +123,18 @@ export type GameService = ServiceTypes.GameService
 export type GeneratorService = ServiceTypes.GeneratorService
 export type LeaderstatsService = ServiceTypes.LeaderstatsService
 export type PlayerBilboardService = ServiceTypes.PlayerBilboardService
+>>>>>>> 37c7764a17341055d4cf7c8c89bab5c17e6fb95f
 export type PlayerService = ServiceTypes.PlayerService
 export type ProfileService = ServiceTypes.ProfileService
 export type ServiceExtendFn = ServiceTypes.ServiceExtendFn
 export type ServiceFn = ServiceTypes.ServiceFn
 export type ServiceImportFn = ServiceTypes.ServiceImportFn
+<<<<<<< HEAD
+=======
 export type SpawnnersService = ServiceTypes.SpawnnersService
 export type VitalService = ServiceTypes.VitalService
 export type ZoneService = ServiceTypes.ZoneService
+>>>>>>> 37c7764a17341055d4cf7c8c89bab5c17e6fb95f
 
 -- END AUTO-GENERATED
 

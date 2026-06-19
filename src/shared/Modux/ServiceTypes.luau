@@ -4,6 +4,12 @@
 
 local CoreTypes = require(script.Parent.CoreTypes)
 local ComponentTypes = require(script.Parent.ComponentTypes)
+<<<<<<< HEAD
+type DataKeyPayload = CoreTypes.DataKeyPayload
+type DataTemplate = CoreTypes.DataTemplate
+type DataTemplateKey = CoreTypes.DataTemplateKey
+type Executor<T> = CoreTypes.Executor<T>
+=======
 type AlienConfig = CoreTypes.AlienConfig
 type AlienStates = CoreTypes.AlienStates
 type AlienType = CoreTypes.AlienType
@@ -15,6 +21,7 @@ type DayCycle = CoreTypes.DayCycle
 type Disconnect = CoreTypes.Disconnect
 type Executor<T> = CoreTypes.Executor<T>
 type FSM<State> = CoreTypes.FSM<State>
+>>>>>>> 37c7764a17341055d4cf7c8c89bab5c17e6fb95f
 type GlobalClock = CoreTypes.GlobalClock
 type LyncConnection = CoreTypes.LyncConnection
 type LyncKeyedPacket<Payload, Key, Value> = CoreTypes.LyncKeyedPacket<Payload, Key, Value>
@@ -25,18 +32,32 @@ type Mode = CoreTypes.Mode
 type Network = CoreTypes.Network
 type NetworkTarget = CoreTypes.NetworkTarget
 type OnCancel = CoreTypes.OnCancel
+<<<<<<< HEAD
+=======
 type PlayerZoneConfig = CoreTypes.PlayerZoneConfig
+>>>>>>> 37c7764a17341055d4cf7c8c89bab5c17e6fb95f
 type Promise<T> = CoreTypes.Promise<T>
 type PromiseAPI = CoreTypes.PromiseAPI
 type PromiseLike = CoreTypes.PromiseLike
 type PromiseStatus = CoreTypes.PromiseStatus
 type R6 = CoreTypes.R6
 type Reject = CoreTypes.Reject
+<<<<<<< HEAD
+=======
 type removeTypes = CoreTypes.removeTypes
+>>>>>>> 37c7764a17341055d4cf7c8c89bab5c17e6fb95f
 type Resolve<T> = CoreTypes.Resolve<T>
 type Signal<T...> = CoreTypes.Signal<T...>
 type SignalAPI = CoreTypes.SignalAPI
 type SignalConnection = CoreTypes.SignalConnection
+<<<<<<< HEAD
+type TickRate = CoreTypes.TickRate
+type Tools = CoreTypes.Tools
+type Type = CoreTypes.Type
+type ComponentExtendFn = ComponentTypes.ComponentExtendFn
+type ComponentFn = ComponentTypes.ComponentFn
+type ComponentImportFn = ComponentTypes.ComponentImportFn
+=======
 type SpawnType = CoreTypes.SpawnType
 type State<T> = CoreTypes.State<T>
 type StateCallback<State> = CoreTypes.StateCallback<State>
@@ -52,12 +73,16 @@ type ComponentFn = ComponentTypes.ComponentFn
 type ComponentImportFn = ComponentTypes.ComponentImportFn
 type EnemyBaseComponent = ComponentTypes.EnemyBaseComponent
 type FieldAreaComponent = ComponentTypes.FieldAreaComponent
+>>>>>>> 37c7764a17341055d4cf7c8c89bab5c17e6fb95f
 type GetAllComponentsFn = ComponentTypes.GetAllComponentsFn
 type GetComponentFn = ComponentTypes.GetComponentFn
 type GetRequiredComponentFn = ComponentTypes.GetRequiredComponentFn
 type ImportFn = ComponentTypes.ImportFn
 type MixinExtendFn = ComponentTypes.MixinExtendFn
 type MixinFn = ComponentTypes.MixinFn
+<<<<<<< HEAD
+--> SERVICES
+=======
 type PlayerZoneComponent = ComponentTypes.PlayerZoneComponent
 type RegionComponent = ComponentTypes.RegionComponent
 type SolarPanelComponent = ComponentTypes.SolarPanelComponent
@@ -292,6 +317,7 @@ export type PlayerBilboardService = {
 	Attributes: { [string]: any },
 }
 
+>>>>>>> 37c7764a17341055d4cf7c8c89bab5c17e6fb95f
 export type PlayerService = {
 	ID: string,
 	Type: Type,
@@ -299,11 +325,15 @@ export type PlayerService = {
 	OnPlayerRemoved: (self: PlayerService, callback: (Player: Player) -> ()) -> (),
 	OnCharacterAdded: (self: PlayerService, callback: (Character: R6, Player: Player) -> ()) -> (),
 	OnCharacterRemoved: (self: PlayerService, callback: (Character: R6, Player: Player) -> ()) -> (),
+<<<<<<< HEAD
+	Extend: (self: PlayerService, id: string) -> PlayerService,
+=======
 	GetAllPlayers: (self: PlayerService) -> { Player },
 	GetAllCharacters: (self: PlayerService) -> { R6 },
 	allPlayers: { [number]: Player },
 	allCharacters: { [number]: R6 },
 	Extend: (self: PlayerService, id: "AlienBaseMixin" | "AreaMixin" | "PlayerZoneComponent") -> PlayerService,
+>>>>>>> 37c7764a17341055d4cf7c8c89bab5c17e6fb95f
 	Import: ServiceImportFn,
 	OnInit: (self: PlayerService, cb: (self: PlayerService) -> ()) -> PlayerService,
 	OnStart: (self: PlayerService, cb: (self: PlayerService) -> ()) -> PlayerService,
@@ -331,16 +361,31 @@ export type PlayerService = {
 export type ProfileService = {
 	ID: string,
 	Type: Type,
+<<<<<<< HEAD
+	OnPlayerAdded: (self: ProfileService, callback: (Player: Player) -> ()) -> (),
+	OnPlayerRemoved: (self: ProfileService, callback: (Player: Player) -> ()) -> (),
+	OnCharacterAdded: (self: ProfileService, callback: (Character: R6, Player: Player) -> ()) -> (),
+	OnCharacterRemoved: (self: ProfileService, callback: (Character: R6, Player: Player) -> ()) -> (),
+=======
 	PlayerService: PlayerService,
+>>>>>>> 37c7764a17341055d4cf7c8c89bab5c17e6fb95f
 	Set: (self: ProfileService, Player: Player, Key: DataTemplateKey, value: any) -> any,
 	ReplicateKey: (self: ProfileService, Player: Player, Key: DataTemplateKey) -> (),
 	Replicate: (self: ProfileService, Player: Player) -> any,
 	GetData: (self: ProfileService, Player: Player) -> DataTemplate?,
+<<<<<<< HEAD
+	PrintData: FileSyncReplicationService,
+	Profiles: { [Player]: any },
+	OnUpdateData: Signal<any>,
+	OnUpdateKey: Signal<any>,
+	Extend: (self: ProfileService, id: string) -> ProfileService,
+=======
 	PrintData: boolean,
 	Profiles: { [Player]: any },
 	OnUpdateData: Signal<Player, DataTemplate>,
 	OnUpdateKey: Signal<Player, DataTemplateKey, any>,
 	Extend: (self: ProfileService, id: "AlienBaseMixin" | "AreaMixin" | "PlayerZoneComponent") -> ProfileService,
+>>>>>>> 37c7764a17341055d4cf7c8c89bab5c17e6fb95f
 	Import: ServiceImportFn,
 	OnInit: (self: ProfileService, cb: (self: ProfileService) -> ()) -> ProfileService,
 	OnStart: (self: ProfileService, cb: (self: ProfileService) -> ()) -> ProfileService,
@@ -364,6 +409,17 @@ export type ProfileService = {
 	Tools: Tools,
 	Attributes: { [string]: any },
 }
+<<<<<<< HEAD
+--> IMPORT FUNCTIONS
+
+export type ServiceImportFn =
+	(<Self>(self: Self, id: "PlayerService", scopeKey: string?) -> Self) &
+	(<Self>(self: Self, id: "ProfileService", scopeKey: string?) -> Self)
+
+--> EXTEND FUNCTIONS
+
+export type ServiceExtendFn = <Self>(self: Self, id: string) -> Self
+=======
 
 export type SpawnnersService = {
 	ID: string,
@@ -483,10 +539,15 @@ export type ServiceExtendFn =
 	(<Self>(self: Self, id: "AlienBaseMixin") -> Self) &
 	(<Self>(self: Self, id: "AreaMixin") -> Self) &
 	(<Self>(self: Self, id: "PlayerZoneComponent") -> Self)
+>>>>>>> 37c7764a17341055d4cf7c8c89bab5c17e6fb95f
 
 --> MODUX OVERLOADS
 
 export type ServiceFn =
+<<<<<<< HEAD
+	((id: "PlayerService", mode: Mode?) -> PlayerService) &
+	((id: "ProfileService", mode: Mode?) -> ProfileService)
+=======
 	((id: "BattleService", mode: Mode?) -> BattleService) &
 	((id: "DayNightService", mode: Mode?) -> DayNightService) &
 	((id: "EnemyService", mode: Mode?) -> EnemyService) &
@@ -499,6 +560,7 @@ export type ServiceFn =
 	((id: "SpawnnersService", mode: Mode?) -> SpawnnersService) &
 	((id: "VitalService", mode: Mode?) -> VitalService) &
 	((id: "ZoneService", mode: Mode?) -> ZoneService)
+>>>>>>> 37c7764a17341055d4cf7c8c89bab5c17e6fb95f
 
 -- END AUTO-GENERATED
 

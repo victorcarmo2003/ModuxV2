@@ -8,6 +8,11 @@ version = "2.3.3"
 dependencies = []
 
 [[package]]
+name = "cometahn142/promise"
+version = "0.1.2"
+dependencies = []
+
+[[package]]
 name = "ddashdev/profilestore"
 version = "1.0.4"
 dependencies = []
@@ -18,14 +23,89 @@ version = "0.0.2"
 dependencies = []
 
 [[package]]
-name = "evaera/promise"
-version = "4.0.0"
+name = "jsdotlua/boolean"
+version = "1.2.7"
+dependencies = [["number", "jsdotlua/number@1.2.7"]]
+
+[[package]]
+name = "jsdotlua/collections"
+version = "1.2.7"
+dependencies = [["es7-types", "jsdotlua/es7-types@1.2.7"], ["instance-of", "jsdotlua/instance-of@1.2.7"]]
+
+[[package]]
+name = "jsdotlua/console"
+version = "1.2.7"
+dependencies = [["collections", "jsdotlua/collections@1.2.7"]]
+
+[[package]]
+name = "jsdotlua/es7-types"
+version = "1.2.7"
 dependencies = []
 
 [[package]]
-name = "hakor/rojo-src"
-version = "0.1.0"
-dependencies = [["fusion", "mattschrubb/fusion@1.2.5"], ["lync", "axp3cter/lync@2.3.3"], ["promise", "evaera/promise@4.0.0"], ["quickzone", "levnth/quickzone@0.0.1"], ["sera", "enzzyfrenzzy/sera@0.0.2"], ["spring", "nyxariko/spring@0.1.1"], ["profilestore", "ddashdev/profilestore@1.0.4"]]
+name = "jsdotlua/instance-of"
+version = "1.2.7"
+dependencies = []
+
+[[package]]
+name = "jsdotlua/luau-polyfill"
+version = "1.2.7"
+dependencies = [["boolean", "jsdotlua/boolean@1.2.7"], ["collections", "jsdotlua/collections@1.2.7"], ["console", "jsdotlua/console@1.2.7"], ["es7-types", "jsdotlua/es7-types@1.2.7"], ["instance-of", "jsdotlua/instance-of@1.2.7"], ["math", "jsdotlua/math@1.2.7"], ["number", "jsdotlua/number@1.2.7"], ["string", "jsdotlua/string@1.2.7"], ["symbol-luau", "jsdotlua/symbol-luau@1.0.1"], ["timers", "jsdotlua/timers@1.2.7"]]
+
+[[package]]
+name = "jsdotlua/math"
+version = "1.2.7"
+dependencies = []
+
+[[package]]
+name = "jsdotlua/number"
+version = "1.2.7"
+dependencies = []
+
+[[package]]
+name = "jsdotlua/promise"
+version = "3.5.2"
+dependencies = []
+
+[[package]]
+name = "jsdotlua/react"
+version = "17.2.1"
+dependencies = [["luau-polyfill", "jsdotlua/luau-polyfill@1.2.7"], ["shared", "jsdotlua/shared@17.2.1"]]
+
+[[package]]
+name = "jsdotlua/react-reconciler"
+version = "17.2.1"
+dependencies = [["luau-polyfill", "jsdotlua/luau-polyfill@1.2.7"], ["promise", "jsdotlua/promise@3.5.2"], ["react", "jsdotlua/react@17.2.1"], ["scheduler", "jsdotlua/scheduler@17.2.1"], ["shared", "jsdotlua/shared@17.2.1"]]
+
+[[package]]
+name = "jsdotlua/react-roblox"
+version = "17.2.1"
+dependencies = [["luau-polyfill", "jsdotlua/luau-polyfill@1.2.7"], ["react", "jsdotlua/react@17.2.1"], ["react-reconciler", "jsdotlua/react-reconciler@17.2.1"], ["scheduler", "jsdotlua/scheduler@17.2.1"], ["shared", "jsdotlua/shared@17.2.1"]]
+
+[[package]]
+name = "jsdotlua/scheduler"
+version = "17.2.1"
+dependencies = [["luau-polyfill", "jsdotlua/luau-polyfill@1.2.7"], ["shared", "jsdotlua/shared@17.2.1"]]
+
+[[package]]
+name = "jsdotlua/shared"
+version = "17.2.1"
+dependencies = [["luau-polyfill", "jsdotlua/luau-polyfill@1.2.7"]]
+
+[[package]]
+name = "jsdotlua/string"
+version = "1.2.7"
+dependencies = [["es7-types", "jsdotlua/es7-types@1.2.7"], ["number", "jsdotlua/number@1.2.7"]]
+
+[[package]]
+name = "jsdotlua/symbol-luau"
+version = "1.0.1"
+dependencies = []
+
+[[package]]
+name = "jsdotlua/timers"
+version = "1.2.7"
+dependencies = [["collections", "jsdotlua/collections@1.2.7"]]
 
 [[package]]
 name = "levnth/quickzone"
@@ -41,3 +121,8 @@ dependencies = []
 name = "nyxariko/spring"
 version = "0.1.1"
 dependencies = []
+
+[[package]]
+name = "valf4/mergeyen"
+version = "0.1.0"
+dependencies = [["fusion", "mattschrubb/fusion@1.2.5"], ["lync", "axp3cter/lync@2.3.3"], ["promise", "cometahn142/promise@0.1.2"], ["quickzone", "levnth/quickzone@0.0.1"], ["react", "jsdotlua/react@17.2.1"], ["react-roblox", "jsdotlua/react-roblox@17.2.1"], ["sera", "enzzyfrenzzy/sera@0.0.2"], ["spring", "nyxariko/spring@0.1.1"], ["profilestore", "ddashdev/profilestore@1.0.4"]]

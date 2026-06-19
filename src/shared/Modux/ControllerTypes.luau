@@ -5,6 +5,12 @@
 local CoreTypes = require(script.Parent.CoreTypes)
 local ComponentTypes = require(script.Parent.ComponentTypes)
 local ServiceTypes = require(script.Parent.ServiceTypes)
+<<<<<<< HEAD
+type DataKeyPayload = CoreTypes.DataKeyPayload
+type DataTemplate = CoreTypes.DataTemplate
+type DataTemplateKey = CoreTypes.DataTemplateKey
+type Executor<T> = CoreTypes.Executor<T>
+=======
 type AlienConfig = CoreTypes.AlienConfig
 type AlienStates = CoreTypes.AlienStates
 type AlienType = CoreTypes.AlienType
@@ -16,6 +22,7 @@ type DayCycle = CoreTypes.DayCycle
 type Disconnect = CoreTypes.Disconnect
 type Executor<T> = CoreTypes.Executor<T>
 type FSM<State> = CoreTypes.FSM<State>
+>>>>>>> 37c7764a17341055d4cf7c8c89bab5c17e6fb95f
 type GlobalClock = CoreTypes.GlobalClock
 type LyncConnection = CoreTypes.LyncConnection
 type LyncKeyedPacket<Payload, Key, Value> = CoreTypes.LyncKeyedPacket<Payload, Key, Value>
@@ -26,18 +33,32 @@ type Mode = CoreTypes.Mode
 type Network = CoreTypes.Network
 type NetworkTarget = CoreTypes.NetworkTarget
 type OnCancel = CoreTypes.OnCancel
+<<<<<<< HEAD
+=======
 type PlayerZoneConfig = CoreTypes.PlayerZoneConfig
+>>>>>>> 37c7764a17341055d4cf7c8c89bab5c17e6fb95f
 type Promise<T> = CoreTypes.Promise<T>
 type PromiseAPI = CoreTypes.PromiseAPI
 type PromiseLike = CoreTypes.PromiseLike
 type PromiseStatus = CoreTypes.PromiseStatus
 type R6 = CoreTypes.R6
 type Reject = CoreTypes.Reject
+<<<<<<< HEAD
+=======
 type removeTypes = CoreTypes.removeTypes
+>>>>>>> 37c7764a17341055d4cf7c8c89bab5c17e6fb95f
 type Resolve<T> = CoreTypes.Resolve<T>
 type Signal<T...> = CoreTypes.Signal<T...>
 type SignalAPI = CoreTypes.SignalAPI
 type SignalConnection = CoreTypes.SignalConnection
+<<<<<<< HEAD
+type TickRate = CoreTypes.TickRate
+type Tools = CoreTypes.Tools
+type Type = CoreTypes.Type
+type ComponentExtendFn = ComponentTypes.ComponentExtendFn
+type ComponentFn = ComponentTypes.ComponentFn
+type ComponentImportFn = ComponentTypes.ComponentImportFn
+=======
 type SpawnType = CoreTypes.SpawnType
 type State<T> = CoreTypes.State<T>
 type StateCallback<State> = CoreTypes.StateCallback<State>
@@ -53,12 +74,15 @@ type ComponentFn = ComponentTypes.ComponentFn
 type ComponentImportFn = ComponentTypes.ComponentImportFn
 type EnemyBaseComponent = ComponentTypes.EnemyBaseComponent
 type FieldAreaComponent = ComponentTypes.FieldAreaComponent
+>>>>>>> 37c7764a17341055d4cf7c8c89bab5c17e6fb95f
 type GetAllComponentsFn = ComponentTypes.GetAllComponentsFn
 type GetComponentFn = ComponentTypes.GetComponentFn
 type GetRequiredComponentFn = ComponentTypes.GetRequiredComponentFn
 type ImportFn = ComponentTypes.ImportFn
 type MixinExtendFn = ComponentTypes.MixinExtendFn
 type MixinFn = ComponentTypes.MixinFn
+<<<<<<< HEAD
+=======
 type PlayerZoneComponent = ComponentTypes.PlayerZoneComponent
 type RegionComponent = ComponentTypes.RegionComponent
 type SolarPanelComponent = ComponentTypes.SolarPanelComponent
@@ -71,11 +95,26 @@ type GameService = ServiceTypes.GameService
 type GeneratorService = ServiceTypes.GeneratorService
 type LeaderstatsService = ServiceTypes.LeaderstatsService
 type PlayerBilboardService = ServiceTypes.PlayerBilboardService
+>>>>>>> 37c7764a17341055d4cf7c8c89bab5c17e6fb95f
 type PlayerService = ServiceTypes.PlayerService
 type ProfileService = ServiceTypes.ProfileService
 type ServiceExtendFn = ServiceTypes.ServiceExtendFn
 type ServiceFn = ServiceTypes.ServiceFn
 type ServiceImportFn = ServiceTypes.ServiceImportFn
+<<<<<<< HEAD
+--> CONTROLLERS
+--> IMPORT FUNCTIONS
+
+export type ControllerImportFn = <Self>(self: Self, id: string, scopeKey: string?) -> Self
+
+--> EXTEND FUNCTIONS
+
+export type ControllerExtendFn = <Self>(self: Self, id: string) -> Self
+
+--> MODUX OVERLOADS
+
+export type ControllerFn = (id: string, mode: Mode?) -> any
+=======
 type SpawnnersService = ServiceTypes.SpawnnersService
 type VitalService = ServiceTypes.VitalService
 type ZoneService = ServiceTypes.ZoneService
@@ -412,6 +451,7 @@ export type ControllerFn =
 	((id: "ScreenController", mode: Mode?) -> ScreenController) &
 	((id: "UIAnimationsController", mode: Mode?) -> UIAnimationsController) &
 	((id: "VitalController", mode: Mode?) -> VitalController)
+>>>>>>> 37c7764a17341055d4cf7c8c89bab5c17e6fb95f
 
 -- END AUTO-GENERATED
 

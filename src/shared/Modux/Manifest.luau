@@ -3,6 +3,14 @@
 
 return {
 	Shared = {
+<<<<<<< HEAD
+	},
+	Server = {
+		"Services.PlayerService",
+		"Services.ProfileService",
+	},
+	Client = {
+=======
 		"Components.PlayerZoneComponent",
 		"Components.RegionComponent",
 		"Components.SolarPanelComponent",
@@ -35,5 +43,6 @@ return {
 		"Controllers.ScreenController",
 		"Controllers.UIAnimationsController",
 		"Controllers.VitalController",
+>>>>>>> 37c7764a17341055d4cf7c8c89bab5c17e6fb95f
 	},
 }

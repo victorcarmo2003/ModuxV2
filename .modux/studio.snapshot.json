@@ -1,0 +1,14 @@
+{
+  "protocolVersion": 2,
+  "workspaceHash": "3d6490d8a4897cc7683b8a38ebe9a258dbd2f315f21939d476eec4143b1a0cda",
+  "contractHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "generatedAt": "2026-06-19T15:57:23.644Z",
+  "place": {
+    "id": 98689925199492,
+    "name": "Behavior"
+  },
+  "components": [],
+  "starterGui": {
+    "screens": []
+  }
+}

@@ -8,6 +8,8 @@ export type ScreenGuiRoot = ScreenGui
 export type StarterGuiTypes = {
 	ScreenGui: ScreenGuiRoot,
 }
+<<<<<<< HEAD
+=======
 --> COMPONENT INSTANCE TYPES
 
 export type EnemyBaseComponentInstance = BasePart
@@ -21,6 +23,7 @@ export type SolarPanelComponentInstance = Instance
 export type VitalComponentInstance = Player
 
 export type ZoneComponentInstance = Instance
+>>>>>>> 37c7764a17341055d4cf7c8c89bab5c17e6fb95f
 
 -- END AUTO-GENERATED
 

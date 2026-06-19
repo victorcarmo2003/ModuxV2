@@ -8,6 +8,9 @@ export type Type = "Service" | "Controller" | "Component" | "Mixin"
 export type TickRate = number
 --> REACHABLE PROJECT TYPES (generated statically)
 export type DataTemplate = {
+<<<<<<< HEAD
+	Cash: number,
+=======
 	Gems: number,
 	Gamepasses: { [string]: boolean },
 	Item: { [string]: number },
@@ -24,11 +27,17 @@ export type DataTemplate = {
 	GemsSpent: number,
 	ChestOpen: number,
 	SpinWheel: number,
+>>>>>>> 37c7764a17341055d4cf7c8c89bab5c17e6fb95f
 	MusicVolume: number,
 	SoundVolume: number,
 	MusicEnabled: boolean,
 	SoundEnabled: boolean,
 }
+<<<<<<< HEAD
+export type DataTemplateKey = "Cash" | "MusicVolume" | "SoundVolume" | "MusicEnabled" | "SoundEnabled"
+export type DataKeyPayload =
+	{ key: "Cash", value: number }
+=======
 export type DataTemplateKey = "Gems" | "Gamepasses" | "Item" | "UnlockedItems" | "UnlockedClasses" | "Badgets" | "FirstLogin" | "Wins" | "DayCount" | "CurrentZone" | "CurrentClass" | "TimeSpent" | "RobuxSpent" | "GemsSpent" | "ChestOpen" | "SpinWheel" | "MusicVolume" | "SoundVolume" | "MusicEnabled" | "SoundEnabled"
 export type DataKeyPayload =
 	{ key: "Gems", value: number }
@@ -47,10 +56,13 @@ export type DataKeyPayload =
 	| { key: "GemsSpent", value: number }
 	| { key: "ChestOpen", value: number }
 	| { key: "SpinWheel", value: number }
+>>>>>>> 37c7764a17341055d4cf7c8c89bab5c17e6fb95f
 	| { key: "MusicVolume", value: number }
 	| { key: "SoundVolume", value: number }
 	| { key: "MusicEnabled", value: boolean }
 	| { key: "SoundEnabled", value: boolean }
+<<<<<<< HEAD
+=======
 type MainGui = ScreenGuiRoot
 type WindowId = UIWindowId
 type AnimationHandle<T> = {
@@ -163,6 +175,7 @@ export type AlienConfig = {
 }
 export type SpawnType = "Base" | "Field" | "EnemyBase"
 type GameStates = "Begin" | "Normal" | "DarkMoon"
+>>>>>>> 37c7764a17341055d4cf7c8c89bab5c17e6fb95f
 export type R6 = {
 	Head: {
 		Mesh: SpecialMesh,
@@ -253,6 +266,8 @@ export type R6 = {
 	} & LocalScript,
 	Body_Colors: BodyColors,
 } & Model
+<<<<<<< HEAD
+=======
 type AreaState = "Active" | "Unactive"
 type AreaRegistredType = {
 	ID: number,
@@ -268,6 +283,7 @@ export type PlayerZoneConfig = {
 	Shape: "Block" | "Ball" | "Cylinder" | "Wedge" | "CornerWedge",
 }
 export type callbackZone = (Player: Player, Zone: PlayerZoneConfig) -> ()
+>>>>>>> 37c7764a17341055d4cf7c8c89bab5c17e6fb95f
 --> LYNC BASE TYPES
 export type LyncConnection = { connected: boolean, disconnect: (self: LyncConnection) -> () }
 export type LyncPacketStats = { bytesSent: number, bytesReceived: number, fires: number, recvFires: number, drops: number }
